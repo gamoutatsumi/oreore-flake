@@ -28,9 +28,9 @@
       { ... }:
       {
         systems = [ "x86_64-linux" ];
-        imports = [
-          ./packages
-        ];
+        perSystem = {
+          imports = [ ./packages ];
+        };
       }
     )
     // (flake-parts.lib.mkFlake { inherit inputs; } {
@@ -38,9 +38,7 @@
         "x86_64-linux"
         "aarch64-darwin"
       ];
-      imports = [
-          flake-parts.flakeModules.easyOverlay
-      ];
+      imports = [ flake-parts.flakeModules.easyOverlay ];
       perSystem =
         { system, pkgs, ... }:
         let
