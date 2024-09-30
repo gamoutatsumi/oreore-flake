@@ -29,7 +29,6 @@
       {
         systems = [ "x86_64-linux" ];
         imports = [
-          flake-parts.flakeModules.easyOverlay
           ./packages
         ];
       }
@@ -38,6 +37,9 @@
       systems = [
         "x86_64-linux"
         "aarch64-darwin"
+      ];
+      imports = [
+          flake-parts.flakeModules.easyOverlay
       ];
       perSystem =
         { system, pkgs, ... }:
