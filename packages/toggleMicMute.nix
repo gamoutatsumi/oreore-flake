@@ -9,7 +9,7 @@ pkgs.writeShellApplication {
     pkgs.coreutils
   ];
   derivationArgs = {
-    platforms = [ "x86_64-linux" ];
+    meta.platforms = [ "x86_64-linux" ];
   };
   text = ''
     function getProgressString() {

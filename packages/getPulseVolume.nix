@@ -12,7 +12,7 @@ pkgs.writeShellApplication {
     pkgs.coreutils-full
   ];
   derivationArgs = {
-    platforms = [ "x86_64-linux" ];
+    meta.platforms = [ "x86_64-linux" ];
   };
   text = ''
     default_sink="''$(LANG=C LC_ALL=C pactl info | grep "^Default Sink" | awk '{print ''$3}')"

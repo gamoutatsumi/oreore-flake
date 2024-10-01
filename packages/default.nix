@@ -4,8 +4,7 @@
   pkgs,
   config,
   ...
-}:
-{
+}: {
   overlayAttrs = {
     changeBrightness = import ./changeBrightness.nix { inherit lib pkgs; };
     toggleMicMute = import ./toggleMicMute.nix { inherit lib pkgs; };
@@ -16,6 +15,6 @@
     changeVolume = import ./changeVolume.nix { inherit lib pkgs; };
     launchPolybar = import ./launchPolybar.nix { inherit lib pkgs; };
     rofiSystem = import ./rofiSystem.nix { inherit lib pkgs; };
-    xmonadpropread = import ./xmonadpropread { inherit lib pkgs; };
+    xmonadpropread = import ./xmonadpropread.nix { inherit lib pkgs; };
   };
 }

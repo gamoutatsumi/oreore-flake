@@ -7,7 +7,7 @@ pkgs.writeShellApplication {
     pkgs.coreutils-full
   ];
   derivationArgs = {
-    platforms = [ "x86_64-linux" ];
+    meta.platforms = [ "x86_64-linux" ];
   };
   text = ''
     FILENAME="''${HOME}/Pictures/screenshot-''$(date +%Y-%m-%d-%T).png"

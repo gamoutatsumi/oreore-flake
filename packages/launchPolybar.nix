@@ -10,7 +10,7 @@ pkgs.writeShellApplication {
     pkgs.iproute2
   ];
   derivationArgs = {
-    platforms = [ "x86_64-linux" ];
+    meta.platforms = [ "x86_64-linux" ];
   };
   text = ''
     while pgrep -u ''$UID -x polybar > /dev/null; do sleep 0.1; done

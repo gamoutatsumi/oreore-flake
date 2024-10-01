@@ -10,9 +10,7 @@ pkgs.writeShellApplication {
     pkgs.gnused
   ];
   derivationArgs = {
-    meta = {
-      platforms = [ "x86_64-linux" ];
-    };
+      meta.platforms = [ "x86_64-linux" ];
   };
   text = ''
     function getProgressString() {

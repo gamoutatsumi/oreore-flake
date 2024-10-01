@@ -7,7 +7,7 @@ pkgs.writeShellApplication {
     pkgs.gawk
   ];
   derivationArgs = {
-    platforms = [ "x86_64-linux" ];
+    meta.platforms = [ "x86_64-linux" ];
   };
   text = ''
     play_icon=
