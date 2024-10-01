@@ -3,7 +3,7 @@ pkgs.writeShellApplication {
   name = "maimSelect";
   runtimeInputs = [
     pkgs.maim
-    pkgs.clip
+    pkgs.xclip
     pkgs.coreutils-full
   ];
   derivationArgs = {
