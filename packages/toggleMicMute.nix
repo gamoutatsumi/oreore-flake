@@ -1,6 +1,6 @@
 { lib, pkgs, ... }:
 pkgs.writeShellApplication {
-  name = "playerctlStatus";
+  name = "toggleMicMute";
   runtimeInputs = [
     pkgs.pulseaudio
     pkgs.gnugrep
