@@ -4,7 +4,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   overlayAttrs = {
     changeBrightness = import ./changeBrightness.nix { inherit lib pkgs; };
     toggleMicMute = import ./toggleMicMute.nix { inherit lib pkgs; };
