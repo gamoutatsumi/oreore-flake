@@ -30,9 +30,9 @@ pkgs.writeShellApplication {
     IFS=''$'\n'
     for m in ''$(polybar --list-monitors); do
       if grep -q primary <(echo "''${m}"); then
-        MONITOR=''$(echo ''$m | cut -d":" -f1) polybar --reload main >/dev/null 2>&1 &
+        MONITOR=''$(echo "''${m}" | cut -d":" -f1) polybar --reload main >/dev/null 2>&1 &
       else
-        MONITOR=''$(echo ''$m | cut -d":" -f1) polybar --reload sub >/dev/null 2>&1 &
+        MONITOR=''$(echo "''${m}" | cut -d":" -f1) polybar --reload sub >/dev/null 2>&1 &
       fi
     done
   '';
