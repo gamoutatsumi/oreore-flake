@@ -35,6 +35,7 @@ pkgs.writeShellApplication {
       fi
     }
 
+    # shellcheck disable=SC2068
     main $@
   '';
 }
