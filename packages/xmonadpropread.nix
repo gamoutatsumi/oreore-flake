@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 let
   xmonadpropread = pkgs.writeScriptBin {
-    name = "xmonadpropread";
+    name = "xmonadpropread_script";
     derivationArgs = {
       meta = {
         platforms = [ "x86_64-linux" ];
