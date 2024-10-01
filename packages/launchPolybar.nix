@@ -25,7 +25,7 @@ pkgs.writeShellApplication {
       if [[ -n ''$DEFAULT_INTERFACE ]]; then
         break
       fi
-      ((i++))
+      ((i++)) || true
       sleep 1
     done
     IFS=''$'\n'
