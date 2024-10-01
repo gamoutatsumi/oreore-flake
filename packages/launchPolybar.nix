@@ -2,7 +2,6 @@
 pkgs.writeShellApplication {
   name = "launchPolybar";
   runtimeInputs = [
-    pkgs.polybar
     pkgs.procps
     pkgs.gnugrep
     pkgs.gawk
