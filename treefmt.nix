@@ -8,6 +8,9 @@
     nixfmt = {
       enable = true;
     };
+    shfmt = {
+      enable = true;
+    };
     # keep-sorted end
   };
 }
