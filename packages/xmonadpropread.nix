@@ -71,7 +71,7 @@ in
 pkgs.symlinkJoin {
   name = "xmonadpropread";
   paths = [
-    (pkgs.haskellPackages.ghcWithPackages (pkgs: [ pkgs.haskellPackages.X11 ]))
+    (pkgs.haskellPackages.ghcWithPackages (pkgs: [ pkgs.X11 ]))
     xmonadpropread
   ];
 }
