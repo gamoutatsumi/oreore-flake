@@ -35,6 +35,6 @@ pkgs.writeShellApplication {
       fi
     }
 
-    main "$@"
+    main $*
   '';
 }
