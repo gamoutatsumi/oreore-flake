@@ -24,16 +24,7 @@
       flake-parts,
       ...
     }@inputs:
-    flake-parts.lib.mkFlake { inherit inputs; } (
-      { ... }:
-      {
-        systems = [ "x86_64-linux" ];
-        perSystem = {
-          imports = [ ./packages ];
-        };
-      }
-    )
-    // (flake-parts.lib.mkFlake { inherit inputs; } {
+    flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
         "aarch64-darwin"
@@ -46,6 +37,7 @@
           treefmtEval = (treefmt-nix.lib.evalModule pkgs ./treefmt.nix);
         in
         {
+          imports = [ ./packages ];
           formatter = (treefmtEval.config.build.wrapper);
           checks = {
             pre-commit-check = hooks.run {
@@ -70,6 +62,5 @@
             };
           };
         };
-
-    });
+    };
 }

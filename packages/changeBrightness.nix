@@ -1,27 +1,42 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
-pkgs.writeShellScriptBin "changeBrightness" ''
-  function getProgressString() {
-    ITEMS="''$1" # The total number of items(the width of the bar)
-    FILLED_ITEM="''$2" # The look of a filled item 
-    NOT_FILLED_ITEM="''$3" # The look of a not filled item
-    STATUS="''$4" # The current progress status in percent
+pkgs.writeShellApplication {
 
-    # calculate how many items need to be filled and not filled
-    FILLED_ITEMS=''$(echo "((''${ITEMS} * ''${STATUS})/100 + 0.5) / 1" | bc)
-    NOT_FILLED_ITEMS=''$(echo "''$ITEMS - ''$FILLED_ITEMS" | ${pkgs.bc}/bin/bc)
+  name = "changeBrightness";
+  runtimeInputs = [
+    pkgs.xorg.xbacklight
+    pkgs.dunst
+    pkgs.bc
+    pkgs.gnused
+  ];
+  derivationArgs = {
+    meta = {
+      platforms = [ "x86_64-linux" ];
+    };
+  };
+  text = ''
+    function getProgressString() {
+      ITEMS="''$1" # The total number of items(the width of the bar)
+      FILLED_ITEM="''$2" # The look of a filled item 
+      NOT_FILLED_ITEM="''$3" # The look of a not filled item
+      STATUS="''$4" # The current progress status in percent
 
-    # Assemble the bar string
-    msg=''$(printf "%''${FILLED_ITEMS}s" | ${pkgs.gnused}/bin/sed "s| |''${FILLED_ITEM}|g")
-    msg=''${msg}''$(printf "%''${NOT_FILLED_ITEMS}s" | ${pkgs.gnused}/bin/sed "s| |''${NOT_FILLED_ITEM}|g")
-    echo "''$msg"
-  }
+      # calculate how many items need to be filled and not filled
+      FILLED_ITEMS=''$(echo "((''${ITEMS} * ''${STATUS})/100 + 0.5) / 1" | bc)
+      NOT_FILLED_ITEMS=''$(echo "''$ITEMS - ''$FILLED_ITEMS" | bc)
 
-  # Arbitrary but unique message id
+      # Assemble the bar string
+      msg=''$(printf "%''${FILLED_ITEMS}s" | sed "s| |''${FILLED_ITEM}|g")
+      msg=''${msg}''$(printf "%''${NOT_FILLED_ITEMS}s" | sed "s| |''${NOT_FILLED_ITEM}|g")
+      echo "''$msg"
+    }
 
-  ${pkgs.xorg.xbacklight}/bin/xbacklight "''$@" -time 1000 
+    # Arbitrary but unique message id
 
-  brightness="''$(${pkgs.xorg.xbacklight}/bin/xbacklight -get)"
-  dunstify -h string:x-dunst-stack-tag:volume -a "changeBrightness" -u low -i "display-brightness-symbolic" \
-    "Brightness: ''${brightness}%" "''$(getProgressString 10 "<b> </b>" "　" "''${brightness}")"
-''
+    xbacklight "''$@" -time 1000 
+
+    brightness="''$(xbacklight -get)"
+    dunstify -h string:x-dunst-stack-tag:volume -a "changeBrightness" -u low -i "display-brightness-symbolic" \
+      "Brightness: ''${brightness}%" "''$(getProgressString 10 "<b> </b>" "　" "''${brightness}")"
+  '';
+}

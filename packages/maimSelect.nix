@@ -1,9 +1,19 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
+pkgs.writeShellApplication {
+  name = "maimSelect";
+  runtimeInputs = [
+    pkgs.maim
+    pkgs.clip
+    pkgs.coreutils-full
+  ];
+  derivationArgs = {
+    platforms = [ "x86_64-linux" ];
+  };
+  text = ''
+    FILENAME="''${HOME}/Pictures/screenshot-''$(date +%Y-%m-%d-%T).png"
 
-pkgs.writeShellScriptBin "maimSelect" ''
-  FILENAME="''${HOME}/Pictures/screenshot-''$(${pkgs.coreutils-full}/bin/date +%Y-%m-%d-%T).png"
+    maim -s -u "''${FILENAME}" 
 
-  ${pkgs.maim}/bin/maim -s -u "''${FILENAME}" 
-
-  ${pkgs.xclip}/bin/xclip -selection c -t image/png "''${FILENAME}"
-''
+    xclip -selection c -t image/png "''${FILENAME}"
+  '';
+}
