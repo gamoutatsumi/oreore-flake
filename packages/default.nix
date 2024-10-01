@@ -1,10 +1,4 @@
-{
-  inputs,
-  lib,
-  pkgs,
-  config,
-  ...
-}:
+{ lib, pkgs, ... }:
 {
   overlayAttrs = {
     changeBrightness = import ./changeBrightness.nix { inherit lib pkgs; };

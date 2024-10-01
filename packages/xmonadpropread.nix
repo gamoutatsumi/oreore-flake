@@ -1,11 +1,11 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 let
   xmonadpropreadEnv = pkgs.haskellPackages.ghcWithPackages (self: [
     self.xmonad-contrib
     self.X11
   ]);
 in
-pkgs.stdenv.mkDerivation rec {
+pkgs.stdenv.mkDerivation {
   pname = "xmonadpropread";
 
   inherit (pkgs.haskellPackages.xmonad-contrib) src version;

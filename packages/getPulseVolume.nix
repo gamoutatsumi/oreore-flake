@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 pkgs.writeShellApplication {
   name = "getPulseVolume";

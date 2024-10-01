@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 pkgs.writeShellApplication {
   name = "maimSelect";
   runtimeInputs = [
