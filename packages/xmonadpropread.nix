@@ -67,11 +67,12 @@ let
       decodeCChar = UTF8.decode . map fromIntegral
     '';
   };
+  ghcEnv = pkgs.haskellPackages.ghcWithPackages (pkgs: [ pkgs.X11 ]);
 in
 pkgs.symlinkJoin {
   name = "xmonadpropread";
   paths = [
-    (pkgs.haskellPackages.ghcWithPackages (pkgs: [ pkgs.X11 ]))
+    ghcEnv
     xmonadpropread
   ];
 }
