@@ -35,7 +35,7 @@ pkgs.writeShellApplication {
 
     # Arbitrary but unique message id
 
-    if [[ "''$@" == "mute" ]]; then
+    if [[ "''$1" == "mute" ]]; then
       pactl set-sink-mute @DEFAULT_SINK@ toggle
     else
       pactl -- set-sink-volume @DEFAULT_SINK@ "''$@"

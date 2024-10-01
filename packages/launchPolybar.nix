@@ -20,7 +20,7 @@ pkgs.writeShellApplication {
       if [[ ''$i -eq 10 ]]; then
         break
       fi
-      export DEFAULT_INTERFACE=''$(ip route | grep '^default' | awk '{print ''$5}' | head -n1)
+      DEFAULT_INTERFACE=''$(ip route | grep '^default' | awk '{print ''$5}' | head -n1)
       export DEFAULT_INTERFACE
       if [[ -n ''$DEFAULT_INTERFACE ]]; then
         break
