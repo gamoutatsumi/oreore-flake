@@ -19,7 +19,6 @@
     {
       self,
       pre-commit-hooks,
-      nixpkgs,
       treefmt-nix,
       flake-parts,
       ...
