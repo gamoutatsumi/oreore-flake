@@ -11,5 +11,6 @@
     launchPolybar = import ./launchPolybar.nix { inherit lib pkgs; };
     rofiSystem = import ./rofiSystem.nix { inherit lib pkgs; };
     xmonadpropread = import ./xmonadpropread.nix { inherit lib pkgs; };
+    aicommit2 = import ./aicommit2.nix { inherit lib pkgs; };
   };
 }
