@@ -29,6 +29,9 @@
         nixpkgs = {
           follows = "nixpkgs";
         };
+        nixpkgs-stable = {
+          follows = "nixpkgs";
+        };
       };
     };
   };
