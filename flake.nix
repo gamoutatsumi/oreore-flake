@@ -11,6 +11,14 @@
         };
       };
     };
+    dagger = {
+      url = "github:dagger/nix";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
@@ -42,6 +50,7 @@
       pre-commit-hooks,
       treefmt-nix,
       flake-parts,
+      dagger,
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -72,11 +81,13 @@
           };
           devShells = {
             default = pkgs.mkShell {
-              packages = with pkgs; [
-                nixd
-                nixfmt-rfc-style
-                efm-langserver
-              ];
+              packages =
+                (with pkgs; [
+                  nixd
+                  nixfmt-rfc-style
+                  efm-langserver
+                ])
+                ++ [ dagger.packages.${system}.dagger ];
               inherit (self.checks.${system}.pre-commit-check) shellHook;
               buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
             };

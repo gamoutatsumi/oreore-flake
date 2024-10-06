@@ -7,6 +7,7 @@ pkgs.writeShellApplication {
     pkgs.gawk
     pkgs.coreutils
     pkgs.iproute2
+    pkgs.polybarFull
   ];
   derivationArgs = {
     meta.platforms = [ "x86_64-linux" ];
