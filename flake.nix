@@ -83,7 +83,7 @@
             default = pkgs.mkShell {
               packages =
                 (with pkgs; [
-                  nixd
+                  nil
                   nixfmt-rfc-style
                   efm-langserver
                 ])
