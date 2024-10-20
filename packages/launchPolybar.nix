@@ -18,14 +18,16 @@ pkgs.writeShellApplication {
     i=0
     while true; do
       if [[ ''$i -eq 10 ]]; then
-        break
+        echo "loop count over 10. exit."
+        exit 0
       fi
       DEFAULT_INTERFACE=''$(ip route | grep '^default' | awk '{print ''$5}' | head -n1)
       export DEFAULT_INTERFACE
       if [[ -n ''$DEFAULT_INTERFACE ]]; then
-        break
+        echo "default network interface not found."
+        exit 0
       fi
-      ((i++)) || true
+      i=$((i + 1))
       sleep 1
     done
     IFS=''$'\n'
