@@ -63,17 +63,34 @@
         { system, pkgs, ... }:
         let
           hooks = pre-commit-hooks.lib.${system};
-          treefmtEval = (treefmt-nix.lib.evalModule pkgs ./treefmt.nix);
+          treefmtWrapper = (
+            treefmt-nix.lib.mkWrapper pkgs {
+              projectRootFile = "flake.nix";
+              programs = {
+                # keep-sorted start block=yes
+                keep-sorted = {
+                  enable = true;
+                };
+                nixfmt = {
+                  enable = true;
+                };
+                shfmt = {
+                  enable = true;
+                };
+                # keep-sorted end
+              };
+            }
+          );
         in
         {
           imports = [ ./packages ];
-          formatter = (treefmtEval.config.build.wrapper);
+          formatter = treefmtWrapper;
           checks = {
             pre-commit-check = hooks.run {
               src = ./.;
               hooks = {
                 treefmt = {
-                  packageOverrides.treefmt = (treefmtEval.config.build.wrapper);
+                  packageOverrides.treefmt = treefmtWrapper;
                   enable = true;
                 };
               };
