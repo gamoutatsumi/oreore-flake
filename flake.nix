@@ -84,6 +84,19 @@
                 # keep-sorted end
               };
             };
+            devShells = {
+              default = pkgs.mkShell {
+                packages =
+                  (with pkgs; [
+                    nil
+                    nixfmt-rfc-style
+                    efm-langserver
+                  ])
+                  ++ [ dagger.packages.${system}.dagger ];
+              };
+            };
+          }
+          // lib.optionalAttrs (inputs.pre-commit-hooks ? perSystem) {
             pre-commit = {
               check = {
                 enable = true;
@@ -96,17 +109,6 @@
                     packageOverrides.treefmt = config.treefmt.build.wrapper;
                   };
                 };
-              };
-            };
-            devShells = {
-              default = pkgs.mkShell {
-                packages =
-                  (with pkgs; [
-                    nil
-                    nixfmt-rfc-style
-                    efm-langserver
-                  ])
-                  ++ [ dagger.packages.${system}.dagger ];
               };
             };
           };
