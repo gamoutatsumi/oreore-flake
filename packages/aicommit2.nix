@@ -2,16 +2,12 @@
 let
   nodejs = pkgs.nodejs_18;
   pnpm = pkgs.pnpm_8;
+  fetcher = import (../_sources/generated.nix).aicommit2;
 in
 pkgs.stdenv.mkDerivation rec {
-  pname = "aicommit2";
-  version = "2.1.4";
-  src = pkgs.fetchFromGitHub {
-    owner = "tak-bro";
-    repo = "aicommit2";
-    rev = "v${version}";
-    hash = "sha256-r8H+b/oC4Et/7LvO3jiLOZ2eLBhCAFZbkJW+0TA41yE=";
-  };
+  pname = fetcher.pname;
+  version = fetcher.version;
+  src = fetcher.src;
   buildInputs = [ nodejs ];
   nativeBuildInputs = [
     pnpm.configHook

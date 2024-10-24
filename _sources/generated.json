@@ -1,0 +1,22 @@
+{
+    "aicommit2": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "aicommit2",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "tak-bro",
+            "repo": "aicommit2",
+            "rev": "v2.1.5",
+            "sha256": "sha256-/bl0Qo4y3rDdGXIKTdjC5wtbeW1NUaIMkw5uzSQ+8Dk=",
+            "type": "github"
+        },
+        "version": "v2.1.5"
+    }
+}

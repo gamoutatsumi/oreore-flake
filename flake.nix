@@ -74,8 +74,10 @@
                     nil
                     nixfmt-rfc-style
                     efm-langserver
+                    nvfetcher
                   ])
                   ++ [ dagger.packages.${system}.dagger ];
+                inputsFrom = [ config.pre-commit.devShell ];
               };
             };
           }
@@ -99,6 +101,13 @@
             formatter = config.treefmt.build.wrapper;
             treefmt = {
               projectRootFile = "flake.nix";
+              settings = {
+                formatter = {
+                  nixfmt = {
+                    excludes = [ "_sources/**/*.nix" ];
+                  };
+                };
+              };
               programs = {
                 # keep-sorted start block=yes
                 keep-sorted = {
