@@ -67,23 +67,6 @@
           }:
           {
             imports = [ ./packages ];
-            formatter = config.treefmt.build.wrapper;
-            treefmt = {
-              projectRootFile = "flake.nix";
-              programs = {
-                # keep-sorted start block=yes
-                keep-sorted = {
-                  enable = true;
-                };
-                nixfmt = {
-                  enable = true;
-                };
-                shfmt = {
-                  enable = true;
-                };
-                # keep-sorted end
-              };
-            };
             devShells = {
               default = pkgs.mkShell {
                 packages =
@@ -109,6 +92,25 @@
                     packageOverrides.treefmt = config.treefmt.build.wrapper;
                   };
                 };
+              };
+            };
+          }
+          // lib.optionalAttrs (inputs.treefmt-nix ? flakeModule) {
+            formatter = config.treefmt.build.wrapper;
+            treefmt = {
+              projectRootFile = "flake.nix";
+              programs = {
+                # keep-sorted start block=yes
+                keep-sorted = {
+                  enable = true;
+                };
+                nixfmt = {
+                  enable = true;
+                };
+                shfmt = {
+                  enable = true;
+                };
+                # keep-sorted end
               };
             };
           };
