@@ -47,24 +47,32 @@
   outputs =
     {
       self,
-      pre-commit-hooks,
-      treefmt-nix,
       flake-parts,
       dagger,
       ...
     }@inputs:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-darwin"
-      ];
-      imports = [ flake-parts.flakeModules.easyOverlay ];
-      perSystem =
-        { system, pkgs, ... }:
-        let
-          hooks = pre-commit-hooks.lib.${system};
-          treefmtWrapper = (
-            treefmt-nix.lib.mkWrapper pkgs {
+    flake-parts.lib.mkFlake { inherit inputs; } (
+      { inputs, lib, ... }:
+      {
+        systems = [
+          "x86_64-linux"
+          "aarch64-darwin"
+        ];
+        imports =
+          [ flake-parts.flakeModules.easyOverlay ]
+          ++ lib.optionals (inputs.pre-commit-hooks ? flakeModule) [ inputs.pre-commit-hooks.flakeModule ]
+          ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ inputs.treefmt-nix.flakeModule ];
+        perSystem =
+          {
+            system,
+            pkgs,
+            config,
+            ...
+          }:
+          {
+            imports = [ ./packages ];
+            formatter = config.treefmt.build.wrapper;
+            treefmt = {
               projectRootFile = "flake.nix";
               programs = {
                 # keep-sorted start block=yes
@@ -79,36 +87,33 @@
                 };
                 # keep-sorted end
               };
-            }
-          );
-        in
-        {
-          imports = [ ./packages ];
-          formatter = treefmtWrapper;
-          checks = {
-            pre-commit-check = hooks.run {
-              src = ./.;
-              hooks = {
-                treefmt = {
-                  packageOverrides.treefmt = treefmtWrapper;
-                  enable = true;
+            };
+            pre-commit = {
+              check = {
+                enable = true;
+              };
+              settings = {
+                src = ./.;
+                hooks = {
+                  treefmt = {
+                    enable = true;
+                    packageOverrides.treefmt = config.treefmt.build.wrapper;
+                  };
                 };
               };
             };
-          };
-          devShells = {
-            default = pkgs.mkShell {
-              packages =
-                (with pkgs; [
-                  nil
-                  nixfmt-rfc-style
-                  efm-langserver
-                ])
-                ++ [ dagger.packages.${system}.dagger ];
-              inherit (self.checks.${system}.pre-commit-check) shellHook;
-              buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
+            devShells = {
+              default = pkgs.mkShell {
+                packages =
+                  (with pkgs; [
+                    nil
+                    nixfmt-rfc-style
+                    efm-langserver
+                  ])
+                  ++ [ dagger.packages.${system}.dagger ];
+              };
             };
           };
-        };
-    };
+      }
+    );
 }
