@@ -1,8 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, ... }@inputs:
 let
   nodejs = pkgs.nodejs_18;
   pnpm = pkgs.pnpm_8;
-  fetcher = import (../_sources/generated.nix).aicommit2;
+  fetcher = import (../_sources/generated.nix { inherit inputs; }).aicommit2;
 in
 pkgs.stdenv.mkDerivation rec {
   pname = fetcher.pname;
