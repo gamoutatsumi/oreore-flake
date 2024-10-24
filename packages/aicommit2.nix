@@ -1,10 +1,13 @@
-{ pkgs, mySource, ... }:
+{ pkgs, ... }@inputs:
 let
   nodejs = pkgs.nodejs_18;
   pnpm = pkgs.pnpm_8;
+  fetcher = import (../_sources/generated.nix { inherit inputs; }).aicommit2;
 in
 pkgs.stdenv.mkDerivation rec {
-  inherit (mySource) pname version src;
+  pname = fetcher.pname;
+  version = fetcher.version;
+  src = fetcher.src;
   buildInputs = [ nodejs ];
   nativeBuildInputs = [
     pnpm.configHook
