@@ -65,8 +65,43 @@
             config,
             ...
           }:
+          let
+            generated = import ./_sources/generated.nix;
+            names = with builtins; nixpkgs.lib.subtractLists broken (attrNames (readDir pkgDir));
+            withContents = f: with builtins; listToAttrs (map (genPkg f) names);
+            pkgDir = ./packages;
+            overlays = {
+              default =
+                final: prev:
+                prev.lib.composeManyExtensions [
+                  (final: prev: {
+                    sources = generated {
+                      inherit (final)
+                        fetchurl
+                        fetchgit
+                        fetchFromGitHub
+                        dockerTools
+                        ;
+                    };
+                  })
+                  (
+                    final: prev:
+                    withContents (
+                      name:
+                      let
+                        pkg = import (pkgDir + "/${name}");
+                        override = builtins.intersectAttrs (builtins.functionArgs pkg) ({
+                          mySource = prev.sources.${name} or null;
+                        });
+                      in
+                      final.callPackage pkg override
+                    )
+                  )
+                ] final prev;
+            };
+          in
           {
-            imports = [ ./packages ];
+            overlayAttrs = overlays.default;
             devShells = {
               default = pkgs.mkShell {
                 packages =
