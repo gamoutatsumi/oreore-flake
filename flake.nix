@@ -38,6 +38,9 @@
         };
       };
     };
+    systems = {
+      url = "github:nix-systems/default";
+    };
   };
 
   outputs =
@@ -45,15 +48,13 @@
       self,
       flake-parts,
       dagger,
+      systems,
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } (
       { inputs, lib, ... }:
       {
-        systems = [
-          "x86_64-linux"
-          "aarch64-darwin"
-        ];
+        systems = import systems;
         imports =
           [ flake-parts.flakeModules.easyOverlay ]
           ++ lib.optionals (inputs.pre-commit-hooks ? flakeModule) [ inputs.pre-commit-hooks.flakeModule ]
@@ -76,6 +77,7 @@
                     efm-langserver
                   ])
                   ++ [ dagger.packages.${system}.dagger ];
+                inputsFrom = [ config.pre-commit.devShell ];
               };
             };
           }
