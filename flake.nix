@@ -138,7 +138,7 @@
               };
             };
           }
-          // lib.optionalAttrs (inputs.pre-commit-hooks ? perSystem) {
+          // lib.optionalAttrs (inputs.pre-commit-hooks ? flakeModule) {
             pre-commit = {
               check = {
                 enable = true;
@@ -158,6 +158,7 @@
             formatter = config.treefmt.build.wrapper;
             treefmt = {
               projectRootFile = "flake.nix";
+              flakeCheck = false;
               programs = {
                 # keep-sorted start block=yes
                 keep-sorted = {
