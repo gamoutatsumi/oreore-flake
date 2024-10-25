@@ -132,7 +132,9 @@
                   nixfmt-rfc-style
                   efm-langserver
                 ];
-                inputsFrom = [ config.pre-commit.devShell ];
+                inputsFrom =
+                  [ ]
+                  ++ lib.optionals (inputs.pre-commit-hooks ? flakeModule) [ config.pre-commit.devShell ];
               };
             };
           }
