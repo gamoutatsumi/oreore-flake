@@ -2,7 +2,47 @@
   description = "Oreore flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    # keep-sorted start block=yes
+    cachix = {
+      url = "github:cachix/cachix";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+        git-hooks = {
+          follows = "pre-commit-hooks";
+        };
+        flake-compat = {
+          follows = "flake-compat";
+        };
+        devenv = {
+          follows = "devenv";
+        };
+      };
+    };
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+        cachix = {
+          follows = "cachix";
+        };
+        pre-commit-hooks = {
+          follows = "pre-commit-hooks";
+        };
+        nix = {
+          follows = "nix";
+        };
+        flake-compat = {
+          follows = "flake-compat";
+        };
+      };
+    };
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+    };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs = {
@@ -11,21 +51,25 @@
         };
       };
     };
-    dagger = {
-      url = "github:dagger/nix";
+    nix = {
+      url = "github:domenkozar/nix/devenv-2.24";
       inputs = {
         nixpkgs = {
           follows = "nixpkgs";
+        };
+        flake-parts = {
+          follows = "flake-parts";
+        };
+        flake-compat = {
+          follows = "flake-compat";
+        };
+        pre-commit-hooks = {
+          follows = "pre-commit-hooks";
         };
       };
     };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs = {
-        nixpkgs = {
-          follows = "nixpkgs";
-        };
-      };
+    nixpkgs = {
+      url = "github:NixOS/nixpkgs/nixos-24.05";
     };
     pre-commit-hooks = {
       url = "github:cachix/git-hooks.nix";
@@ -36,18 +80,29 @@
         nixpkgs-stable = {
           follows = "nixpkgs";
         };
+        flake-compat = {
+          follows = "flake-compat";
+        };
       };
     };
     systems = {
       url = "github:nix-systems/default";
     };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
+    # keep-sorted end
   };
 
   outputs =
     {
       self,
       flake-parts,
-      dagger,
       systems,
       ...
     }@inputs:
@@ -58,7 +113,9 @@
         imports =
           [ flake-parts.flakeModules.easyOverlay ]
           ++ lib.optionals (inputs.pre-commit-hooks ? flakeModule) [ inputs.pre-commit-hooks.flakeModule ]
-          ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ inputs.treefmt-nix.flakeModule ];
+          ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ inputs.treefmt-nix.flakeModule ]
+          ++ lib.optionals (inputs.devenv ? flakeModule) [ inputs.devenv.flakeModule ];
+
         perSystem =
           {
             system,
@@ -70,13 +127,11 @@
             imports = [ ./packages ];
             devShells = {
               default = pkgs.mkShell {
-                packages =
-                  (with pkgs; [
-                    nil
-                    nixfmt-rfc-style
-                    efm-langserver
-                  ])
-                  ++ [ dagger.packages.${system}.dagger ];
+                packages = with pkgs; [
+                  nil
+                  nixfmt-rfc-style
+                  efm-langserver
+                ];
                 inputsFrom = [ config.pre-commit.devShell ];
               };
             };
