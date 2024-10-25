@@ -26,7 +26,7 @@ pkgs.writeShellApplication {
       if [[ -n ''$DEFAULT_INTERFACE ]]; then
         export DEFAULT_INTERFACE
         echo "found default interface"
-        exit 0
+        break
       fi
       i=$((i + 1))
       sleep 1
