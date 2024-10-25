@@ -8,7 +8,7 @@ pkgs.writeShellApplication {
     pkgs.coreutils
     pkgs.iproute2
     pkgs.polybarFull
-    (import ./xmonadpropread.nix)
+    (pkgs.callPackge ./xmonadpropread.nix { })
   ];
   derivationArgs = {
     meta.platforms = [ "x86_64-linux" ];
