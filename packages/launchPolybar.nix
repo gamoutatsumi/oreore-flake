@@ -23,7 +23,6 @@ pkgs.writeShellApplication {
         exit 0
       fi
       DEFAULT_INTERFACE=''$(ip route | grep '^default' | awk '{print ''$5}' | head -n1)
-      export DEFAULT_INTERFACE
       if [[ -n ''$DEFAULT_INTERFACE ]]; then
         echo "default network interface not found."
         exit 0
