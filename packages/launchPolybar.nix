@@ -20,7 +20,7 @@ pkgs.writeShellApplication {
     while true; do
       if [[ ''$i -eq 10 ]]; then
         echo "loop count over 10. exit."
-        exit 1
+        break
       fi
       DEFAULT_INTERFACE=''$(ip route | grep '^default' | awk '{print ''$5}' | head -n1)
       if [[ -n ''$DEFAULT_INTERFACE ]]; then
