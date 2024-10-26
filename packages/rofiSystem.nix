@@ -8,7 +8,7 @@ pkgs.writeShellApplication {
     set -euCo pipefail
 
     declare -Ar menu=(
-      ['Lock']='xdg-screensaver lock'
+      ['Lock']='loginctl lock-session'
       ['Shutdown']='systemctl poweroff'
       ['Reboot']='systemctl reboot'
       ['Reboot-Into-Firmware']='systemctl reboot --firmware-setup'
