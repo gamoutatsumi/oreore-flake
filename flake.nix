@@ -125,6 +125,9 @@
           }:
           {
             imports = [ ./packages ];
+            checks = {
+              aicommit2 = pkgs.callPackage ./packages/aicommit2.nix { };
+            };
             devShells = {
               default = pkgs.mkShell {
                 packages = with pkgs; [

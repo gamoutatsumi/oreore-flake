@@ -1,10 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
-  nodejs = pkgs.nodejs_18;
-  pnpm = pkgs.pnpm_8;
-in
-pkgs.stdenv.mkDerivation rec {
-  pname = "aicommit2";
+  nodejs = pkgs.nodejs_20;
+  pnpm = pkgs.pnpm_9;
   version = "2.1.4";
   src = pkgs.fetchFromGitHub {
     owner = "tak-bro";
@@ -12,6 +9,10 @@ pkgs.stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-r8H+b/oC4Et/7LvO3jiLOZ2eLBhCAFZbkJW+0TA41yE=";
   };
+  pname = "aicommit2";
+in
+pkgs.stdenv.mkDerivation {
+  inherit version pname src;
   buildInputs = [ nodejs ];
   nativeBuildInputs = [
     pnpm.configHook
@@ -19,7 +20,7 @@ pkgs.stdenv.mkDerivation rec {
   ];
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-DiEmhDXdjDHTkOq5iISQLEYohFcAmJ7hXGDO+cY4PhI=";
+    hash = "sha256-NQQmk3ZYpHUCgqc89BmBEJKbh/c/Lvv+yz+Gqa+in30=";
   };
   buildPhase = ''
     runHook preBuild
@@ -38,4 +39,7 @@ pkgs.stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+  meta = {
+    license = lib.licenses.mit;
+  };
 }
