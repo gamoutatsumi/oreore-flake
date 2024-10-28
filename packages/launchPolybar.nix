@@ -14,7 +14,7 @@ pkgs.writeShellApplication {
     meta.platforms = [ "x86_64-linux" ];
   };
   text = ''
-    while pgrep -u ''$UID -x polybar > /dev/null; do sleep 0.1; done
+    while pgrep -u ''$UID -x .polybar-wrappe > /dev/null; do sleep 0.1; done
 
     i=0
     while true; do
