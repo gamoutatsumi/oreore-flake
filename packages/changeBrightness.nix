@@ -4,7 +4,7 @@ pkgs.writeShellApplication {
 
   name = "changeBrightness";
   runtimeInputs = [
-    pkgs.xorg.xbacklight
+    pkgs.brightnessctl
     pkgs.dunst
     pkgs.bc
     pkgs.gnused
@@ -31,9 +31,9 @@ pkgs.writeShellApplication {
 
     # Arbitrary but unique message id
 
-    xbacklight "''$@" -time 1000 
+    brightnessctl set "''$@"
 
-    brightness="''$(xbacklight -get)"
+    brightness="''$(brightnessctl get)"
     dunstify -h string:x-dunst-stack-tag:volume -a "changeBrightness" -u low -i "display-brightness-symbolic" \
       "Brightness: ''${brightness}%" "''$(getProgressString 10 "<b> </b>" "　" "''${brightness}")"
   '';
