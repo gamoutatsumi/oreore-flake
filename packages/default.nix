@@ -1,16 +1,16 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 {
   overlayAttrs = {
-    changeBrightness = import ./changeBrightness.nix { inherit lib pkgs; };
-    toggleMicMute = import ./toggleMicMute.nix { inherit lib pkgs; };
-    maimFull = import ./maimFull.nix { inherit lib pkgs; };
-    maimSelect = import ./maimSelect.nix { inherit lib pkgs; };
-    playerctlStatus = import ./playerctlStatus.nix { inherit lib pkgs; };
-    getPulseVolume = import ./getPulseVolume.nix { inherit lib pkgs; };
-    changeVolume = import ./changeVolume.nix { inherit lib pkgs; };
-    launchPolybar = import ./launchPolybar.nix { inherit lib pkgs; };
-    rofiSystem = import ./rofiSystem.nix { inherit lib pkgs; };
-    xmonadpropread = import ./xmonadpropread.nix { inherit lib pkgs; };
-    aicommit2 = import ./aicommit2.nix { inherit lib pkgs; };
+    changeBrightness = pkgs.callPackage ./changeBrightness.nix { };
+    toggleMicMute = pkgs.callPackage ./toggleMicMute.nix { };
+    maimFull = pkgs.callPackage ./maimFull.nix { };
+    maimSelect = pkgs.callPackage ./maimSelect.nix { };
+    playerctlStatus = pkgs.callPackage ./playerctlStatus.nix { };
+    getPulseVolume = pkgs.callPackage ./getPulseVolume.nix { };
+    changeVolume = pkgs.callPackage ./changeVolume.nix { };
+    launchPolybar = pkgs.callPackage ./launchPolybar.nix { };
+    rofiSystem = pkgs.callPackage ./rofiSystem.nix { };
+    xmonadpropread = pkgs.callPackage ./xmonadpropread.nix { };
+    aicommit2 = pkgs.callPackage ./aicommit2.nix { };
   };
 }
