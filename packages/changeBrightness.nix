@@ -34,7 +34,9 @@ pkgs.writeShellApplication {
     brightnessctl set "''$@"
 
     brightness="''$(brightnessctl get)"
+    max="''$(brightnessctl max)"
+    current="''$(echo "scale=2;''${brightness}/''${max}*100" | bc)"
     dunstify -h string:x-dunst-stack-tag:volume -a "changeBrightness" -u low -i "display-brightness-symbolic" \
-      "Brightness: ''${brightness}%" "''$(getProgressString 10 "<b> </b>" "　" "''${brightness}")"
+      "Brightness: ''${current}%" "''$(getProgressString 10 "<b> </b>" "　" "''${brightness}")"
   '';
 }
