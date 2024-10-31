@@ -1,7 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 pkgs.writeShellApplication {
-
   name = "changeBrightness";
   runtimeInputs = [
     pkgs.brightnessctl
@@ -10,7 +9,9 @@ pkgs.writeShellApplication {
     pkgs.gnused
   ];
   derivationArgs = {
-    meta.platforms = [ "x86_64-linux" ];
+    meta = {
+      platforms = lib.platforms.linux;
+    };
   };
   text = ''
     function getProgressString() {

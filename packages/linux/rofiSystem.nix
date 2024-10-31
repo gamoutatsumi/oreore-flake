@@ -1,8 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 pkgs.writeShellApplication {
   name = "rofiSystem";
   derivationArgs = {
-    meta.platforms = [ "x86_64-linux" ];
+    meta = {
+      platforms = lib.platforms.linux;
+    };
   };
   text = ''
     set -euCo pipefail

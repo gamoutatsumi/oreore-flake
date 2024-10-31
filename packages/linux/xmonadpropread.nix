@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
   xmonadpropreadEnv = pkgs.haskellPackages.ghcWithPackages (self: [
     self.xmonad-contrib
@@ -19,7 +19,7 @@ pkgs.stdenv.mkDerivation {
   '';
 
   meta = {
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     mainProgram = "xmonadpropread";
     homepage = "https://github.com/xmonad/xmonad-contrib";
   };

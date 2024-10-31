@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 pkgs.writeShellApplication {
   name = "getPulseVolume";
@@ -12,7 +12,9 @@ pkgs.writeShellApplication {
     pkgs.coreutils-full
   ];
   derivationArgs = {
-    meta.platforms = [ "x86_64-linux" ];
+    meta = {
+      platforms = lib.platforms.linux;
+    };
   };
   text = ''
     default_sink="''$(LANG=C LC_ALL=C pactl info | grep "^Default Sink" | awk '{print ''$3}')"

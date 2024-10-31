@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 pkgs.writeShellApplication {
   name = "playerctlStatus";
   runtimeInputs = [
@@ -7,7 +7,9 @@ pkgs.writeShellApplication {
     pkgs.gawk
   ];
   derivationArgs = {
-    meta.platforms = [ "x86_64-linux" ];
+    meta = {
+      platforms = lib.platforms.linux;
+    };
   };
   text = ''
     play_icon=

@@ -1,18 +1,20 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 pkgs.writeShellApplication {
-  name = "maimFull";
+  name = "maimSelect";
   runtimeInputs = [
     pkgs.maim
     pkgs.xclip
     pkgs.coreutils-full
   ];
   derivationArgs = {
-    meta.platforms = [ "x86_64-linux" ];
+    meta = {
+      platforms = lib.platforms.linux;
+    };
   };
   text = ''
     FILENAME="''${HOME}/Pictures/screenshot-''$(date +%Y-%m-%d-%T).png"
 
-    maim "''${FILENAME}" 
+    maim -s -u "''${FILENAME}" 
 
     xclip -selection c -t image/png "''${FILENAME}"
   '';

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 pkgs.writeShellApplication {
   name = "toggleMicMute";
   runtimeInputs = [
@@ -9,7 +9,9 @@ pkgs.writeShellApplication {
     pkgs.coreutils
   ];
   derivationArgs = {
-    meta.platforms = [ "x86_64-linux" ];
+    meta = {
+      platforms = lib.platforms.linux;
+    };
   };
   text = ''
     function getProgressString() {

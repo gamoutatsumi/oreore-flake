@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 pkgs.writeShellApplication {
   name = "launchPolybar";
   runtimeInputs = [
@@ -11,7 +11,9 @@ pkgs.writeShellApplication {
     (pkgs.callPackage ./xmonadpropread.nix { })
   ];
   derivationArgs = {
-    meta.platforms = [ "x86_64-linux" ];
+    meta = {
+      platforms = lib.platforms.linux;
+    };
   };
   text = ''
     while pgrep -u ''$UID -x .polybar-wrappe > /dev/null; do sleep 0.1; done

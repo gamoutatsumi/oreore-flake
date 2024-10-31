@@ -107,7 +107,12 @@
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } (
-      { inputs, lib, ... }:
+      {
+        inputs,
+        lib,
+        withSystem,
+        ...
+      }:
       {
         systems = import systems;
         imports =
@@ -116,6 +121,22 @@
           ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ inputs.treefmt-nix.flakeModule ]
           ++ lib.optionals (inputs.devenv ? flakeModule) [ inputs.devenv.flakeModule ];
 
+        flake = {
+          checks =
+            withSystem "x86_64-linux" (
+              { pkgs, system, ... }:
+              {
+                "${system}" =
+                  (import ./packages/linux { inherit pkgs lib; }) // (import ./packages/all { inherit pkgs lib; });
+              }
+            )
+            // withSystem "aarch64-darwin" (
+              { pkgs, system, ... }:
+              {
+                "${system}" = import ./packages/all { inherit pkgs lib; };
+              }
+            );
+        };
         perSystem =
           {
             system,
@@ -124,10 +145,8 @@
             ...
           }:
           {
-            imports = [ ./packages ];
-            checks = {
-              aicommit2 = pkgs.callPackage ./packages/aicommit2.nix { };
-            };
+            overlayAttrs =
+              (import ./packages/linux { inherit pkgs lib; }) // (import ./packages/all { inherit pkgs lib; });
             devShells = {
               default = pkgs.mkShell {
                 packages = with pkgs; [
