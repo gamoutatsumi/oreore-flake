@@ -8,6 +8,7 @@ let
     repo = "aicommit2";
     rev = "v${version}";
     hash = "sha256-r8H+b/oC4Et/7LvO3jiLOZ2eLBhCAFZbkJW+0TA41yE=";
+    leaveDotGit = true;
   };
   pname = "aicommit2";
 in
