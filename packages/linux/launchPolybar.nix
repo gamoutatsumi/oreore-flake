@@ -24,7 +24,7 @@ pkgs.writeShellApplication {
         break
       fi
       echo "Detecting Default Interface"
-      DEFAULT_INTERFACE="''$(ip route | grep '^default' | awk '{print ''$5}' | head -n1)"
+      DEFAULT_INTERFACE="''$(ip route | awk '{if($1 ~ /^default/) print ''$5}' | head -n1)"
       if [[ -n ''$DEFAULT_INTERFACE ]]; then
         echo "found default interface"
         export DEFAULT_INTERFACE
