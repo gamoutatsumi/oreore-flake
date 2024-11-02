@@ -24,7 +24,7 @@ pkgs.writeShellApplication {
         echo "loop count over 10. exit."
         break
       fi
-      DEFAULT_INTERFACE=''$(ip route | grep '^default' | awk '{print ''$5}' | head -n1)
+      DEFAULT_INTERFACE="''$(ip route | grep '^default' | awk '{print ''$5}' | head -n1)"
       if [[ -n ''$DEFAULT_INTERFACE ]]; then
         export DEFAULT_INTERFACE
         echo "found default interface"
