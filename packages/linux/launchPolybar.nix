@@ -16,9 +16,8 @@ pkgs.writeShellApplication {
     };
   };
   text = ''
-    while pgrep -u ''$UID -x .polybar-wrappe > /dev/null; do sleep 0.1; done
-
     i=0
+    echo "Starting Polybar..."
     while true; do
       if [[ ''$i -eq 10 ]]; then
         echo "loop count over 10. exit."
