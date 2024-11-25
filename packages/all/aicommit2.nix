@@ -2,12 +2,12 @@
 let
   nodejs = pkgs.nodejs_20;
   pnpm = pkgs.pnpm_9;
-  version = "2.1.4";
+  version = "2.1.9";
   src = pkgs.fetchFromGitHub {
     owner = "tak-bro";
     repo = "aicommit2";
     rev = "v${version}";
-    hash = "sha256-r8H+b/oC4Et/7LvO3jiLOZ2eLBhCAFZbkJW+0TA41yE=";
+    hash = "sha256-eKMSvofwdAnKfrM8ybuNfF/gWSWzZLghuyiqEx46eyw=";
     leaveDotGit = true;
   };
   pname = "aicommit2";
@@ -21,7 +21,7 @@ pkgs.stdenv.mkDerivation {
   ];
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-NQQmk3ZYpHUCgqc89BmBEJKbh/c/Lvv+yz+Gqa+in30=";
+    hash = "sha256-KkR+T8Hdol+gkaHhkE3Czwvdc3r0bwfEzKtqw7tyDdo=";
   };
   buildPhase = ''
     runHook preBuild

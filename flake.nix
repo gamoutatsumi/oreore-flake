@@ -29,9 +29,6 @@
         cachix = {
           follows = "cachix";
         };
-        pre-commit-hooks = {
-          follows = "pre-commit-hooks";
-        };
         nix = {
           follows = "nix";
         };
