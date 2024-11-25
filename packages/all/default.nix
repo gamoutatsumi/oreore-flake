@@ -1,1 +1,5 @@
-{ pkgs, lib, ... }: lib.genAttrs [ "aicommit2" ] (name: pkgs.callPackage ./${name}.nix { })
+{ pkgs, lib, ... }:
+lib.genAttrs [
+  "aicommit2"
+  "tinty"
+] (name: pkgs.callPackage ./${name}.nix { })

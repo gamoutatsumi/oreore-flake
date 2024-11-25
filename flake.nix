@@ -68,17 +68,28 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-24.05";
     };
+    nixpkgs-unstable = {
+      url = "github:NixOS/nixpkgs/nixos-unstable";
+    };
     pre-commit-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs = {
         nixpkgs = {
-          follows = "nixpkgs";
+          follows = "nixpkgs-unstable";
         };
         nixpkgs-stable = {
           follows = "nixpkgs";
         };
         flake-compat = {
           follows = "flake-compat";
+        };
+      };
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs-unstable";
         };
       };
     };
@@ -101,6 +112,7 @@
       self,
       flake-parts,
       systems,
+      rust-overlay,
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } (
@@ -118,22 +130,40 @@
           ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ inputs.treefmt-nix.flakeModule ]
           ++ lib.optionals (inputs.devenv ? flakeModule) [ inputs.devenv.flakeModule ];
 
-        flake = {
-          checks =
-            withSystem "x86_64-linux" (
-              { pkgs, system, ... }:
-              {
+        flake =
+          withSystem "x86_64-linux" (
+            { pkgs, system, ... }:
+            {
+              _module = {
+                args = {
+                  pkgs = import inputs.nixpkgs-unstable {
+                    inherit system;
+                    overlays = [ rust-overlay.overlays.default ];
+                  };
+                };
+              };
+              checks = {
                 "${system}" =
                   (import ./packages/linux { inherit pkgs lib; }) // (import ./packages/all { inherit pkgs lib; });
-              }
-            )
-            // withSystem "aarch64-darwin" (
-              { pkgs, system, ... }:
-              {
+              };
+            }
+          )
+          // withSystem "aarch64-darwin" (
+            { pkgs, system, ... }:
+            {
+              _module = {
+                args = {
+                  pkgs = import inputs.nixpkgs-unstable {
+                    inherit system;
+                    overlays = [ rust-overlay.overlays.default ];
+                  };
+                };
+              };
+              checks = {
                 "${system}" = import ./packages/all { inherit pkgs lib; };
-              }
-            );
-        };
+              };
+            }
+          );
         perSystem =
           {
             system,
@@ -142,6 +172,14 @@
             ...
           }:
           {
+            _module = {
+              args = {
+                pkgs = import inputs.nixpkgs-unstable {
+                  inherit system;
+                  overlays = [ rust-overlay.overlays.default ];
+                };
+              };
+            };
             overlayAttrs =
               (import ./packages/linux { inherit pkgs lib; }) // (import ./packages/all { inherit pkgs lib; });
             devShells = {

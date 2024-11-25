@@ -21,7 +21,7 @@ pkgs.stdenv.mkDerivation {
   ];
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-KkR+T8Hdol+gkaHhkE3Czwvdc3r0bwfEzKtqw7tyDdo=";
+    hash = "sha256-b2cXWtHMK9p1oI1GinQDawSfFtvHK6zibqiClFBTodk=";
   };
   buildPhase = ''
     runHook preBuild
