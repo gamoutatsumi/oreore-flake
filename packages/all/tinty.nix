@@ -3,6 +3,7 @@
   makeRustPlatform,
   rust-bin,
   lib,
+  installShellFiles,
 }:
 let
   toolchain = rust-bin.stable.latest.default;
@@ -32,5 +33,6 @@ rustPlatform.buildRustPackage {
     installShellCompletion --bash --name ${pname}.bash <($out/bin/${pname} generate-completion bash)
     installShellCompletion --zsh --name _${pname} <($out/bin/${pname} generate-completion zsh)
   '';
+  nativeBuildInputs = [ installShellFiles ];
   meta = lib.licenses.mit;
 }
