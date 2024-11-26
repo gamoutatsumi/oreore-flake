@@ -166,7 +166,7 @@
           )
           // ({
             homeManagerModules = {
-              base16 = ./home-manager/base16;
+              base16 = ./home-manager/modules/base16;
             };
           });
         perSystem =
