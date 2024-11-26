@@ -1,3 +1,4 @@
+{ localFlake, withSystem }:
 {
   config,
   lib,
@@ -49,6 +50,8 @@
 )
 // (
   let
+    inherit (pkgs.stdenv.hostPlatform) system;
+    selfPkgs' = localFlake.packages.${system};
     cfg = config.theme.tinty;
     settingsFormat = pkgs.formats.toml { };
     cfgFile = settingsFormat.generate "config.toml" cfg.settings;
@@ -61,7 +64,7 @@
           settings = lib.mkOption {
             type = settingsFormat.type;
           };
-          package = lib.mkPackageOption pkgs "tinty" { };
+          package = lib.mkPackageOption selfPkgs' "tinty" { };
         };
       };
     };
