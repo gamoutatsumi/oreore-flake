@@ -31,7 +31,7 @@
         };
       };
     };
-    config = lib.mkIf (cfg.wallpaper ? file) {
+    config = lib.mkIf (cfg.file != null) {
       xsession = lib.mkIf config.xsession.enable {
         initExtra =
           let
