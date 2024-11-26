@@ -163,7 +163,12 @@
                 "${system}" = import ./packages/all { inherit pkgs lib; };
               };
             }
-          );
+          )
+          // ({
+            homeManagerModules = {
+              base16 = ./home-manager/base16;
+            };
+          });
         perSystem =
           {
             system,

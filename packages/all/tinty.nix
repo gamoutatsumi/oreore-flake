@@ -29,10 +29,12 @@ rustPlatform.buildRustPackage {
     true
   '';
   postInstall = ''
+    export XDG_DATA_HOME=$(mktemp -d)
+    export XDG_CONFIG_HOME=$(mktemp -d)
     installShellCompletion --cmd ${pname} \
-    --fish <($out/bin/${pname} -c <(echo "{}") --data-dir $out/share/tinty generate-completion fish) \
-    --bash <($out/bin/${pname} -c <(echo "{}") --data-dir $out/share/tinty generate-completion bash) \
-    --zsh <($out/bin/${pname} -c <(echo "{}") --data-dir $out/share/tinty generate-completion zsh)
+    --fish <($out/bin/${pname} generate-completion fish) \
+    --bash <($out/bin/${pname} generate-completion bash) \
+    --zsh <($out/bin/${pname} generate-completion zsh)
   '';
   nativeBuildInputs = [ installShellFiles ];
   meta = lib.licenses.mit;
