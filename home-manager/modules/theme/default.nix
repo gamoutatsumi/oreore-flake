@@ -7,13 +7,6 @@
 (
   let
     cfg = config.theme.wallpaper;
-    flags = lib.concatStringsSep " " (
-      [
-        "--bg-${cfg.display}"
-        "--no-fehbg"
-      ]
-      ++ lib.optional (!cfg.enableXinerama) "--no-xinerama"
-    );
   in
   {
     options = {
@@ -22,24 +15,34 @@
           file = lib.mkOption {
             type = lib.types.path;
           };
-          display = lib.mkOption {
-            type = lib.types.enum [
-              "center"
-              "fill"
-              "max"
-              "scale"
-              "tile"
-            ];
-            default = "fill";
+          xdg = {
+            display = lib.mkOption {
+              type = lib.types.enum [
+                "center"
+                "fill"
+                "max"
+                "scale"
+                "tile"
+              ];
+              default = "fill";
+            };
           };
         };
       };
     };
     config = lib.mkIf (cfg.wallpaper ? file) {
       xsession = lib.mkIf config.xsession.enable {
-        initExtra = ''
-          ${pkgs.feh}/bin/feh ${flags} ${cfg.file} &
-        '';
+        initExtra =
+          let
+            flags = lib.concatStringsSep " " ([
+              "--bg-${cfg.xdg.display}"
+              "--no-fehbg"
+              "--no-xinerama"
+            ]);
+          in
+          ''
+            ${pkgs.feh}/bin/feh ${flags} ${cfg.file} &
+          '';
       };
     };
   }
