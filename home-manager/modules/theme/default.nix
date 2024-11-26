@@ -11,7 +11,7 @@
   in
   {
     options = {
-      xsession = {
+      theme = {
         wallpaper = {
           file = lib.mkOption {
             type = lib.types.path;
