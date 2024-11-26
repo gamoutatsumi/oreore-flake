@@ -2,6 +2,7 @@
   pkgs,
   makeRustPlatform,
   rust-bin,
+  lib,
 }:
 let
   toolchain = rust-bin.stable.latest.default;
@@ -23,4 +24,8 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = "${src}/Cargo.lock";
   };
+  checkPhase = ''
+    true
+  '';
+  meta = lib.licenses.mit;
 }

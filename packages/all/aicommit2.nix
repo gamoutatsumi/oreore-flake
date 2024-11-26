@@ -40,6 +40,9 @@ pkgs.stdenv.mkDerivation {
 
     runHook postInstall
   '';
+  checkPhase = ''
+    pnpm test
+  '';
   meta = {
     license = lib.licenses.mit;
     platforms = nodejs.meta.platforms;
