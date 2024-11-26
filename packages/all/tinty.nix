@@ -27,5 +27,10 @@ rustPlatform.buildRustPackage {
   checkPhase = ''
     true
   '';
+  postInstall = ''
+    installShellCompletion --fish --name ${pname}.fish <($out/bin/${pname} generate-completion fish)
+    installShellCompletion --bash --name ${pname}.bash <($out/bin/${pname} generate-completion bash)
+    installShellCompletion --zsh --name _${pname} <($out/bin/${pname} generate-completion zsh)
+  '';
   meta = lib.licenses.mit;
 }
