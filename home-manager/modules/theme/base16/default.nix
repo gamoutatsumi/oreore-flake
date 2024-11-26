@@ -18,23 +18,6 @@ in
           type = settingsFormat.type;
         };
         package = lib.mkPackageOption pkgs "tinty" { };
-        generate = lib.mkOption {
-          type = lib.types.attrsOf (
-            lib.types.submodule {
-              options = {
-                system = lib.mkOption {
-                  type = lib.types.enum [
-                    "base16"
-                    "base24"
-                  ];
-                };
-                image = lib.mkOption {
-                  type = lib.path;
-                };
-              };
-            }
-          );
-        };
       };
     };
   };
@@ -45,19 +28,19 @@ in
           source = cfgFile;
         };
       };
-      dataFile = lib.attrsets.mapAttrs (name: value: {
-        "tinted-theming/tinty/custom-schemes/${name}.toml" = {
+      dataFile = lib.mkIf (config.theme.wallpaper ? file) {
+        "tinted-theming/tinty/custom-schemes/wallpaper.toml" = {
           source =
-            pkgs.runCommand "${name}.toml"
+            pkgs.runCommand "wallpaper.toml"
               {
                 nativeBuildInputs = [ cfg.package ];
               }
               ''
                 export XDG_DATA_HOME=$(mktemp -d)
-                            tinty --config-file ${cfgFile} --system ${value.system} --save $out ${value.image}
+                            tinty --config-file ${cfgFile} --system base24 --save $out ${config.theme.wallpaper.file}
               '';
         };
-      }) cfg.generate;
+      };
     };
   };
 }
