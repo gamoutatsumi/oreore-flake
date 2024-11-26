@@ -158,6 +158,9 @@
               checks = {
                 "${system}" = config.packages;
               };
+              overlayAttrs = {
+                "${system}" = config.packages;
+              };
             }
           )
           // withSystem "aarch64-darwin" (
@@ -180,6 +183,9 @@
                 "${system}" = import ./packages/all { inherit pkgs lib; };
               };
               checks = {
+                "${system}" = config.packages;
+              };
+              overlayAttrs = {
                 "${system}" = config.packages;
               };
             }
@@ -208,7 +214,6 @@
                 };
               };
             };
-            overlayAttrs = config.packages;
             devShells = {
               default = pkgs.mkShell {
                 packages = with pkgs; [
