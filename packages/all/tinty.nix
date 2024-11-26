@@ -29,9 +29,10 @@ rustPlatform.buildRustPackage {
     true
   '';
   postInstall = ''
-    installShellCompletion --fish --name ${pname}.fish <($out/bin/${pname} generate-completion fish)
-    installShellCompletion --bash --name ${pname}.bash <($out/bin/${pname} generate-completion bash)
-    installShellCompletion --zsh --name _${pname} <($out/bin/${pname} generate-completion zsh)
+    installShellCompletion --cmd ${pname} \
+    --fish <($out/bin/${pname} generate-completion fish) \
+    --bash <($out/bin/${pname} generate-completion bash) \
+    --zsh <($out/bin/${pname} generate-completion zsh)
   '';
   nativeBuildInputs = [ installShellFiles ];
   meta = lib.licenses.mit;
