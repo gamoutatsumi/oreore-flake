@@ -120,8 +120,13 @@
         inputs,
         lib,
         withSystem,
+        flake-parts-lib,
+        self,
         ...
       }:
+      let
+        inherit (flake-parts-lib) importApply;
+      in
       {
         systems = import systems;
         imports =
@@ -132,7 +137,12 @@
 
         flake =
           withSystem "x86_64-linux" (
-            { pkgs, system, ... }:
+            {
+              pkgs,
+              system,
+              config,
+              ...
+            }:
             {
               _module = {
                 args = {
@@ -142,14 +152,22 @@
                   };
                 };
               };
-              checks = {
+              packages = {
                 "${system}" =
                   (import ./packages/linux { inherit pkgs lib; }) // (import ./packages/all { inherit pkgs lib; });
+              };
+              checks = {
+                "${system}" = config.packages;
               };
             }
           )
           // withSystem "aarch64-darwin" (
-            { pkgs, system, ... }:
+            {
+              pkgs,
+              system,
+              config,
+              ...
+            }:
             {
               _module = {
                 args = {
@@ -159,14 +177,20 @@
                   };
                 };
               };
-              checks = {
+              packages = {
                 "${system}" = import ./packages/all { inherit pkgs lib; };
+              };
+              checks = {
+                "${system}" = config.packages;
               };
             }
           )
           // ({
             homeManagerModules = {
-              theme = ./home-manager/modules/theme;
+              theme = importApply ./home-manager/modules/theme {
+                localFlake = self;
+                inherit withSystem;
+              };
             };
           });
         perSystem =
@@ -185,8 +209,7 @@
                 };
               };
             };
-            overlayAttrs =
-              (import ./packages/linux { inherit pkgs lib; }) // (import ./packages/all { inherit pkgs lib; });
+            overlayAttrs = self.packages."${system}";
             devShells = {
               default = pkgs.mkShell {
                 packages = with pkgs; [

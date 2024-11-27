@@ -1,6 +1,8 @@
+{ localFlake, withSystem }:
+{ lib, ... }:
 {
   imports = [
     ./wallpaper.nix
-    ./tinty.nix
+    (lib.importApply ./tinty.nix { inherit localFlake; })
   ];
 }
