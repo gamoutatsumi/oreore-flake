@@ -1,6 +1,6 @@
 {
   imports = [
-    ./wallpaer.nix
+    ./wallpaper.nix
     ./tinty.nix
   ];
 }
