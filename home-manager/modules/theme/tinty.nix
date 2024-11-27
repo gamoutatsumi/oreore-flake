@@ -55,7 +55,7 @@ let
       };
       scheme = lib.mkOption {
         type = lib.types.str;
-        default = if config.theme.wallpaper.file != null then "base24-wallpaper" else "base16-mocha";
+        default = if config.theme.wallpaper.file != null then "wallpaper" else "mocha";
       };
       generate = {
         variant = lib.mkOption {
