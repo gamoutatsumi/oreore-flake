@@ -104,13 +104,11 @@ in
                 nativeBuildInputs = [ cfg.package ];
               }
               ''
-                tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Base24 Wallpaper' --slug base24-wallpaper --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
-                tinty install --config ${cfgFile} --data-dir $out
-                tinty apply --config ${cfgFile} --data-dir $out ${cfg.scheme}
+                cp -r ${cfg.schemesSrc} $out/repos/schemes
+                  tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Base24 Wallpaper' --slug base24-wallpaper --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
+                  tinty install --config ${cfgFile} --data-dir $out
+                  tinty apply --config ${cfgFile} --data-dir $out ${cfg.scheme}
               '';
-        };
-        "tinted-theming/tinty/repos/schemes" = {
-          source = cfg.schemesSrc;
         };
       };
     };
