@@ -16,6 +16,13 @@ let
         default = { };
       };
       package = lib.mkPackageOption pkgs "tinty" { };
+      variant = lib.mkOption {
+        type = lib.types.enum [
+          "light"
+          "dark"
+        ] "The variant of the theme to use";
+        default = "light";
+      };
     };
   };
 in
@@ -44,7 +51,7 @@ in
               }
               ''
                 export XDG_DATA_HOME=$(mktemp -d)
-                            tinty generate-scheme --config ${cfgFile} --system base24 ${config.theme.wallpaper.file} > $out
+                            tinty generate-scheme --config ${cfgFile} --system base24 --name Wallpaper --slug wallpaper --variant ${cfg.variant} ${config.theme.wallpaper.file} > $out
               '';
         };
       };
