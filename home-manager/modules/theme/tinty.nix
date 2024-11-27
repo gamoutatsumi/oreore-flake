@@ -11,10 +11,17 @@ let
   cfg = config.theme.tinty;
   settingsFormat = pkgs.formats.toml { };
   genCfgFile = settings: settingsFormat.generate "config.toml" (settings // cfg.settings);
+  items = builtins.map (v: {
+    name = v.name;
+    path = v.url;
+    themes-dir = v.themes-dir;
+    hooks = v.hooks;
+    supported-systems = v.supported-systems;
+  }) cfg.items;
   cfgFile = genCfgFile {
     shell = "${cfg.shell} -c '{}'";
     default-scheme = cfg.scheme;
-    items = cfg.items;
+    items = items;
   };
   itemType = lib.types.submodule {
     options = {
@@ -23,6 +30,9 @@ let
       };
       path = lib.mkOption {
         type = lib.types.path;
+      };
+      url = lib.mkOption {
+        type = lib.types.str;
       };
       themes-dir = lib.mkOption {
         type = lib.types.str;
@@ -40,6 +50,21 @@ let
         );
       };
     };
+  };
+  repos = pkgs.symlinkJoin {
+    name = "repos";
+    paths = builtins.map (
+      v:
+      pkgs.mkDerivationNoCC {
+        pname = v.name;
+        version = "0.0.0";
+        src = v.path;
+        installPhase = ''
+          mkdir -p $out/${v.name}
+          cp -r $src $out/${v.name}
+        '';
+      }
+    ) cfg.items;
   };
   tintyType = lib.types.submodule {
     options = {
@@ -101,6 +126,7 @@ in
               }
               ''
                 mkdir -p $out/repos
+                cp -r ${repos} $out/repos
                 cp -r ${tintySchemes} $out/repos/schemes
                 tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
                 tinty install --config ${cfgFile} --data-dir $out
