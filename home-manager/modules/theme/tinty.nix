@@ -27,6 +27,14 @@ let
         type = lib.types.nullOr lib.types.str;
         default = null;
       };
+      supported-systems = lib.mkOption {
+        type = lib.types.list (
+          lib.types.enum [
+            "base16"
+            "base24"
+          ]
+        );
+      };
     };
   };
   tintyType = lib.types.submodule {
