@@ -167,7 +167,6 @@
           // ({
             homeManagerModules = {
               theme = ./home-manager/modules/theme;
-              lnav = ./home-manager/modules/programs/lnav;
             };
           });
         perSystem =
