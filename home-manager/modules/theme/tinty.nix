@@ -14,6 +14,7 @@ let
   cfgFile = genCfgFile {
     shell = "${cfg.shell} -c '{}'";
     default-scheme = cfg.scheme;
+    items = cfg.items;
   };
   itemType = lib.types.submodule {
     options = {
