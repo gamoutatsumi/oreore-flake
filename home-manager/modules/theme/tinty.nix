@@ -32,7 +32,7 @@ let
         default = null;
       };
       supported-systems = lib.mkOption {
-        type = lib.types.list (
+        type = lib.types.listOf (
           lib.types.enum [
             "base16"
             "base24"
@@ -67,7 +67,7 @@ let
         };
       };
       items = lib.mkOption {
-        type = lib.types.list itemType;
+        type = lib.types.listOf itemType;
         default = [ ];
       };
     };
