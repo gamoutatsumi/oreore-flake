@@ -127,8 +127,7 @@ in
               ''
                 mkdir -p $out/repos
                 cp -r ${repos}/* $out/repos
-                ls -ld $out
-                ls -l $out/repos/tinted-shell
+                find $out/repos -type d -exec chmod 755 {} \;
                 cp -r ${tintySchemes} $out/repos/schemes
                 tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
                 tinty install --config ${cfgFile} --data-dir $out
