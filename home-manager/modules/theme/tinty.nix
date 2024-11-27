@@ -99,7 +99,7 @@ in
                 cp -r ${tintySchemes} $out/repos/schemes
                 tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Wallpaper' --slug wallpaper --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
                 tinty install --config ${cfgFile} --data-dir $out
-                #tinty apply --config ${cfgFile} --data-dir $out ${cfg.scheme}
+                tinty apply --config ${cfgFile} --data-dir $out ${cfg.scheme}
               '';
         };
       };
