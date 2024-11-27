@@ -94,7 +94,7 @@ in
                 nativeBuildInputs = [ cfg.package ];
               }
               ''
-                tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Base24 Wallpaper' --slug base24-wallpaper --variant ${cfg.generate.variant} ${config.theme.wallpaper.file}
+                tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Base24 Wallpaper' --slug base24-wallpaper --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
                 tinty apply --config ${cfgFile} --data-dir $out ${cfg.scheme}
               '';
         };
