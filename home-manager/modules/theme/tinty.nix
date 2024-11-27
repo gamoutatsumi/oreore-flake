@@ -44,7 +44,7 @@ in
               }
               ''
                 export XDG_DATA_HOME=$(mktemp -d)
-                            tinty generate-scheme --config ${cfgFile} --system base24 --save $out ${config.theme.wallpaper.file}
+                            tinty generate-scheme --config ${cfgFile} --system base24 ${config.theme.wallpaper.file}
               '';
         };
       };
