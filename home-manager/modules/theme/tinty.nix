@@ -86,21 +86,16 @@ in
       packages = [ cfg.package ];
     };
     xdg = {
-      configFile = {
-        "tinted-theming/tinty/config.toml" = {
-          source = cfgFile;
-        };
-      };
       dataFile = lib.mkIf (config.theme.wallpaper.file != null) {
-        "tinted-theming/tinty/custom-schemes/wallpaper.toml" = {
+        "tinted-theming/tinty/" = {
           source =
-            pkgs.runCommand "wallpaper.toml"
+            pkgs.runCommand "tinty"
               {
                 nativeBuildInputs = [ cfg.package ];
               }
               ''
-                export XDG_DATA_HOME=$(mktemp -d)
-                            tinty generate-scheme --config ${cfgFile} --system base24 --name 'Base24 Wallpaper' --slug base24-wallpaper --variant ${cfg.generate.variant} ${config.theme.wallpaper.file} > $out
+                tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Base24 Wallpaper' --slug base24-wallpaper --variant ${cfg.generate.variant} ${config.theme.wallpaper.file}
+                tinty apply --config ${cfgFile} --data-dir $out ${cfg.scheme}
               '';
         };
       };
