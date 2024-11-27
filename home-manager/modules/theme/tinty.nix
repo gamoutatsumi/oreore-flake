@@ -20,7 +20,7 @@ let
         type = lib.types.enum [
           "light"
           "dark"
-        ] "The variant of the theme to use";
+        ];
         default = "light";
       };
     };
