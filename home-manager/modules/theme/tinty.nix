@@ -1,4 +1,4 @@
-{ localFlake }:
+{ localFlake, tintySchemes }:
 {
   config,
   lib,
@@ -70,15 +70,6 @@ let
         type = lib.types.listOf itemType;
         default = [ ];
       };
-      schemesSrc = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.fetchFromGitHub {
-          owner = "tinted-theming";
-          repo = "schemes";
-          rev = "61058a8d2e2bd4482b53d57a68feb56cdb991f0b"; # spec-0.11
-          hash = "sha256-Tp1BpaF5qRav7O2TsSGjCfgRzhiasu4IuwROR66gz1o=";
-        };
-      };
     };
   };
 in
@@ -105,7 +96,7 @@ in
               }
               ''
                 mkdir -p $out/repos
-                cp -r ${cfg.schemesSrc} $out/repos/schemes
+                cp -r ${tintySchemes} $out/repos/schemes
                 tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Base24 Wallpaper' --slug base24-wallpaper --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
                 tinty install --config ${cfgFile} --data-dir $out
                 #tinty apply --config ${cfgFile} --data-dir $out ${cfg.scheme}

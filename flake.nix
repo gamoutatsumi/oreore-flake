@@ -96,6 +96,10 @@
     systems = {
       url = "github:nix-systems/default";
     };
+    tinty-schemes = {
+      url = "github:tinted-theming/schemes";
+      flake = false;
+    };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs = {
@@ -113,6 +117,7 @@
       flake-parts,
       systems,
       rust-overlay,
+      tinty-schemes,
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } (
@@ -189,6 +194,7 @@
             homeManagerModules = {
               theme = importApply ./home-manager/modules/theme {
                 localFlake = self;
+                tintySchemes = tinty-schemes;
                 inherit withSystem importApply;
               };
             };
