@@ -87,6 +87,11 @@ in
       packages = [ cfg.package ];
     };
     xdg = {
+      configFile = {
+        "tinted-theming/tinty/config.toml" = {
+          source = cfgFile;
+        };
+      };
       dataFile = lib.mkIf (config.theme.wallpaper.file != null) {
         "tinted-theming/tinty/" = {
           source =
