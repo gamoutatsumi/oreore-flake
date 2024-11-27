@@ -7,10 +7,11 @@
 (
   let
     cfg = config.theme.wallpaper;
-    wallpaper = lib.types.submodule {
+    wallpaperType = lib.types.submodule {
       options = {
         file = lib.mkOption {
-          type = lib.types.path;
+          type = lib.types.nullOr lib.types.path;
+          default = null;
         };
         xdg = {
           display = lib.mkOption {
@@ -31,7 +32,8 @@
     options = {
       theme = {
         wallpaper = lib.mkOption {
-          type = wallpaper;
+          type = wallpaperType;
+          default = { };
         };
       };
     };
@@ -57,7 +59,7 @@
     cfg = config.theme.tinty;
     settingsFormat = pkgs.formats.toml { };
     cfgFile = settingsFormat.generate "config.toml" cfg.settings;
-    tinty = lib.types.submodule {
+    tintyType = lib.types.submodule {
       options = {
         enable = lib.mkEnableOption "Enable tinty for Tinted-Theming (base16 / base24)";
         settings = lib.mkOption {
@@ -71,7 +73,8 @@
     options = {
       theme = {
         tinty = lib.mkOption {
-          type = tinty;
+          type = tintyType;
+          default = { };
         };
       };
     };
@@ -82,7 +85,7 @@
             source = cfgFile;
           };
         };
-        dataFile = lib.mkIf (config.theme.wallpaper ? file) {
+        dataFile = lib.mkIf (config.theme.wallpaper.file != null) {
           "tinted-theming/tinty/custom-schemes/wallpaper.toml" = {
             source =
               pkgs.runCommand "wallpaper.toml"
