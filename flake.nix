@@ -189,7 +189,7 @@
             homeManagerModules = {
               theme = importApply ./home-manager/modules/theme {
                 localFlake = self;
-                inherit withSystem;
+                inherit withSystem importApply;
               };
             };
           });

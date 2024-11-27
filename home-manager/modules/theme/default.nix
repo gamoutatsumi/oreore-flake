@@ -1,8 +1,12 @@
-{ localFlake, withSystem }:
+{
+  localFlake,
+  withSystem,
+  importApply,
+}:
 { lib, ... }:
 {
   imports = [
     ./wallpaper.nix
-    (lib.importApply ./tinty.nix { inherit localFlake; })
+    (importApply ./tinty.nix { inherit localFlake; })
   ];
 }
