@@ -13,6 +13,7 @@ let
       enable = lib.mkEnableOption "Enable tinty for Tinted-Theming (base16 / base24)";
       settings = lib.mkOption {
         type = settingsFormat.type;
+        default = { };
       };
       package = lib.mkPackageOption pkgs "tinty" { };
     };
