@@ -70,6 +70,15 @@ let
         type = lib.types.listOf itemType;
         default = [ ];
       };
+      schemesSrc = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.fetchFromGitHub {
+          owner = "tinted-theming";
+          repo = "schemes";
+          rev = "61058a8d2e2bd4482b53d57a68feb56cdb991f0b"; # spec-0.11
+          hash = "sha256-Tp1BpaF5qRav7O2TsSGjCfgRzhiasu4IuwROR66gz1o=";
+        };
+      };
     };
   };
 in
@@ -99,6 +108,9 @@ in
                 tinty install --config ${cfgFile} --data-dir $out
                 tinty apply --config ${cfgFile} --data-dir $out ${cfg.scheme}
               '';
+        };
+        "tinted-theming/tinty/repos/schemes" = {
+          source = cfg.schemesSrc;
         };
       };
     };
