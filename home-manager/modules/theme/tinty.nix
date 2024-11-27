@@ -25,11 +25,10 @@ let
         type = lib.types.path;
       };
       themes-dir = lib.mkOption {
-        type = lib.types.string;
+        type = lib.types.str;
       };
       hooks = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
+        type = lib.types.str;
       };
       supported-systems = lib.mkOption {
         type = lib.types.listOf (
