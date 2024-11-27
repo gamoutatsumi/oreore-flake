@@ -55,7 +55,7 @@ let
     name = "repos";
     paths = builtins.map (
       v:
-      pkgs.mkDerivationNoCC {
+      pkgs.stdenvNoCC.mkDerivation {
         pname = v.name;
         version = "0.0.0";
         src = v.path;
