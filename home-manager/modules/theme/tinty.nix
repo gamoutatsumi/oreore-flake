@@ -53,7 +53,18 @@ let
   };
   repos = pkgs.symlinkJoin {
     name = "repos";
-    paths = builtins.map (v: v.path) cfg.items;
+    paths = builtins.map (
+      v:
+      pkgs.stdenvNoCC.mkDerivation {
+        pname = v.name;
+        version = "0.0.0";
+        src = v.path;
+        installPhase = ''
+          mkdir -p $out/${v.name}
+          cp -r $src/* $out/${v.name}
+        '';
+      }
+    ) cfg.items;
   };
   tintyType = lib.types.submodule {
     options = {
