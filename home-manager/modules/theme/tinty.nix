@@ -25,7 +25,7 @@ let
         type = lib.types.path;
       };
       themes-dir = lib.mkOption {
-        type = lib.types.path;
+        type = lib.types.string;
       };
       hooks = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
