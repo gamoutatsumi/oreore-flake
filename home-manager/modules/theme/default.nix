@@ -7,26 +7,31 @@
 (
   let
     cfg = config.theme.wallpaper;
+    wallpaper = lib.types.submodule {
+      options = {
+        file = lib.mkOption {
+          type = lib.types.path;
+        };
+        xdg = {
+          display = lib.mkOption {
+            type = lib.types.enum [
+              "center"
+              "fill"
+              "max"
+              "scale"
+              "tile"
+            ];
+            default = "fill";
+          };
+        };
+      };
+    };
   in
   {
     options = {
       theme = {
-        wallpaper = {
-          file = lib.mkOption {
-            type = lib.types.path;
-          };
-          xdg = {
-            display = lib.mkOption {
-              type = lib.types.enum [
-                "center"
-                "fill"
-                "max"
-                "scale"
-                "tile"
-              ];
-              default = "fill";
-            };
-          };
+        wallpaper = lib.mkOption {
+          type = wallpaper;
         };
       };
     };
@@ -52,16 +57,21 @@
     cfg = config.theme.tinty;
     settingsFormat = pkgs.formats.toml { };
     cfgFile = settingsFormat.generate "config.toml" cfg.settings;
+    tinty = lib.types.submodule {
+      options = {
+        enable = lib.mkEnableOption "Enable tinty for Tinted-Theming (base16 / base24)";
+        settings = lib.mkOption {
+          type = settingsFormat.type;
+        };
+        package = lib.mkPackageOption pkgs "tinty" { };
+      };
+    };
   in
   {
     options = {
       theme = {
-        tinty = {
-          enable = lib.mkEnableOption "Enable tinty for Tinted-Theming (base16 / base24)";
-          settings = lib.mkOption {
-            type = settingsFormat.type;
-          };
-          package = lib.mkPackageOption pkgs "tinty" { };
+        tinty = lib.mkOption {
+          type = tinty;
         };
       };
     };
