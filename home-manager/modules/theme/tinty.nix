@@ -29,6 +29,7 @@ let
       };
       hooks = lib.mkOption {
         type = lib.types.str;
+        default = "";
       };
       supported-systems = lib.mkOption {
         type = lib.types.listOf (
