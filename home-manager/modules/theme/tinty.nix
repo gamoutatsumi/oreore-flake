@@ -110,6 +110,17 @@ in
   config = lib.mkIf cfg.enable {
     home = {
       packages = [ cfg.package ];
+      activation = {
+        tintyApply = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+          (
+          export XDG_CONFIG_HOME=${lib.escapeShellArg config.xdg.configHome}
+          export XDG_DATA_HOME=${lib.escapeShellArg config.xdg.dataHome}
+          verboseEcho "Applying tinty theme"
+          cd "${pkgs.emptyDirectory}"
+          run ${lib.getExe cfg.package} apply ${cfg.scheme}
+          )
+        '';
+      };
     };
     xdg = {
       configFile = {
@@ -117,7 +128,7 @@ in
           source = cfgFile;
         };
       };
-      dataFile = lib.mkIf (config.theme.wallpaper.file != null) {
+      dataFile = {
         "tinted-theming/tinty/" = {
           source =
             pkgs.runCommand "tinty"
@@ -129,10 +140,10 @@ in
                 cp -r ${repos}/* $out/repos
                 find $out/repos -type d -exec chmod 755 {} \;
                 cp -r ${tintySchemes} $out/repos/schemes
-                tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
+                ${lib.mkIf (config.theme.wallpaper.file != null) ''
+                  tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
+                ''}
                 tinty install --config ${cfgFile} --data-dir $out
-                tinty list --config ${cfgFile} --custom-schemes --data-dir $out
-                tinty apply --config ${cfgFile} --data-dir $out ${cfg.scheme}
               '';
         };
       };
