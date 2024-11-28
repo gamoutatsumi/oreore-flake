@@ -140,9 +140,14 @@ in
                 cp -r ${repos}/* $out/repos
                 find $out/repos -type d -exec chmod 755 {} \;
                 cp -r ${tintySchemes} $out/repos/schemes
-                ${lib.mkIf (config.theme.wallpaper.file != null) ''
-                  tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
-                ''}
+                ${
+                  if (config.theme.wallpaper.file != null) then
+                    ''
+                      tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
+                    ''
+                  else
+                    ""
+                }
                 tinty install --config ${cfgFile} --data-dir $out
               '';
         };
