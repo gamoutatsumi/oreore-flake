@@ -150,7 +150,7 @@ in
                 }
                 tinty install --config ${cfgFile} --data-dir $out
               ''
-            ++ lib.strings.concatLines (
+            + lib.strings.concatLines (
               builtins.map (v: ''tinty build --config ${cfgFile} --data-dir $out $out/repos/${v.name}'') cfg.items
             );
         };
