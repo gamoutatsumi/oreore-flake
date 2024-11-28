@@ -135,24 +135,26 @@ in
               {
                 nativeBuildInputs = [ cfg.package ];
               }
-              ''
-                mkdir -p $out/repos
-                cp -r ${repos}/* $out/repos
-                find $out/repos -type d -exec chmod 755 {} \;
-                cp -r ${tintySchemes} $out/repos/schemes
-                ${
-                  if (config.theme.wallpaper.file != null) then
-                    ''
-                      tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
-                    ''
-                  else
-                    ""
-                }
-                tinty install --config ${cfgFile} --data-dir $out
-              ''
-            + lib.strings.concatLines (
-              builtins.map (v: ''tinty build --config ${cfgFile} --data-dir $out $out/repos/${v.name}'') cfg.items
-            );
+              (
+                ''
+                  mkdir -p $out/repos
+                  cp -r ${repos}/* $out/repos
+                  find $out/repos -type d -exec chmod 755 {} \;
+                  cp -r ${tintySchemes} $out/repos/schemes
+                  ${
+                    if (config.theme.wallpaper.file != null) then
+                      ''
+                        tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
+                      ''
+                    else
+                      ""
+                  }
+                  tinty install --config ${cfgFile} --data-dir $out
+                ''
+                + lib.strings.concatLines (
+                  builtins.map (v: ''tinty build --config ${cfgFile} --data-dir $out $out/repos/${v.name}'') cfg.items
+                )
+              );
         };
       };
     };
