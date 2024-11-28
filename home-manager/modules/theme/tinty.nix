@@ -149,6 +149,7 @@ in
                     ""
                 }
                 tinty install --config ${cfgFile} --data-dir $out
+                tinty build --config ${cfgFile} --data-dir $out
               '';
         };
       };
