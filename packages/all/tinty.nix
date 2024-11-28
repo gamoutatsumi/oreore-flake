@@ -37,5 +37,9 @@ rustPlatform.buildRustPackage {
     --zsh <($out/bin/${pname} generate-completion zsh)
   '';
   nativeBuildInputs = [ installShellFiles ];
-  meta = lib.licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    mainProgram = "${pname}";
+  };
 }
