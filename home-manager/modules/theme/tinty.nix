@@ -30,12 +30,14 @@ let
       supported-systems = [ "base16" ];
     })
   ];
-  itemsForCfg = builtins.map (v: {
-    name = v.name;
-    path = v.url;
-    themes-dir = v.themes-dir;
-    supported-systems = v.supported-systems;
-  }) items;
+  itemsForCfg = break (
+    builtins.map (v: {
+      name = v.name;
+      path = v.url;
+      themes-dir = v.themes-dir;
+      supported-systems = v.supported-systems;
+    }) items
+  );
   cfgFile = genCfgFile {
     shell = "${cfg.shell} -c '{}'";
     default-scheme = cfg.scheme;
