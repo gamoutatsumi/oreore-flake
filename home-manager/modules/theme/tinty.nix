@@ -12,16 +12,18 @@ let
   settingsFormat = pkgs.formats.toml { };
   genCfgFile = settings: settingsFormat.generate "config.toml" (settings // cfg.settings);
   items = [
-    (lib.mkIf (cfg.themes.alacritty.enable) {
-      name = "tinted-alacritty";
-      path = cfg.themes.alacritty.repo;
-      url = "https://github.com/tinted-theming/tinted-alacritty";
-      themes-dir = "colors-256";
-      supported-systems = [
-        "base16"
-        "base24"
-      ];
-    })
+    (break (
+      lib.mkIf (cfg.themes.alacritty.enable) {
+        name = "tinted-alacritty";
+        path = cfg.themes.alacritty.repo;
+        url = "https://github.com/tinted-theming/tinted-alacritty";
+        themes-dir = "colors-256";
+        supported-systems = [
+          "base16"
+          "base24"
+        ];
+      }
+    ))
     (lib.mkIf (cfg.themes.shell.enable) {
       name = "tinted-shell";
       path = cfg.themes.shell.repo;
@@ -30,14 +32,12 @@ let
       supported-systems = [ "base16" ];
     })
   ];
-  itemsForCfg = break (
-    builtins.map (v: {
-      name = v.name;
-      path = v.url;
-      themes-dir = v.themes-dir;
-      supported-systems = v.supported-systems;
-    }) items
-  );
+  itemsForCfg = builtins.map (v: {
+    name = v.name;
+    path = v.url;
+    themes-dir = v.themes-dir;
+    supported-systems = v.supported-systems;
+  }) items;
   cfgFile = genCfgFile {
     shell = "${cfg.shell} -c '{}'";
     default-scheme = cfg.scheme;
