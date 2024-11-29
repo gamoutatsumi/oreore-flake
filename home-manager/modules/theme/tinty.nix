@@ -11,17 +11,35 @@ let
   cfg = config.theme.tinty;
   settingsFormat = pkgs.formats.toml { };
   genCfgFile = settings: settingsFormat.generate "config.toml" (settings // cfg.settings);
-  items = builtins.map (v: {
+  items = [
+    (lib.mkIf (cfg.themes.alacritty.enable) {
+      name = "tinted-alacritty";
+      path = cfg.themes.alacritty.repo;
+      url = "https://github.com/tinted-theming/tinted-alacritty";
+      themes-dir = "colors-256";
+      supported-systems = [
+        "base16"
+        "base24"
+      ];
+    })
+    (lib.mkIf (cfg.themes.shell.enable) {
+      name = "tinted-shell";
+      path = cfg.themes.shell.repo;
+      url = "https://github.com/tinted-theming/tinted-shell";
+      themes-dir = "scripts";
+      supported-systems = [ "base16" ];
+    })
+  ];
+  itemsForCfg = builtins.map (v: {
     name = v.name;
     path = v.url;
     themes-dir = v.themes-dir;
-    hooks = v.hooks;
     supported-systems = v.supported-systems;
-  }) cfg.items;
+  }) items;
   cfgFile = genCfgFile {
     shell = "${cfg.shell} -c '{}'";
     default-scheme = cfg.scheme;
-    items = items;
+    items = itemsForCfg;
   };
   itemType = lib.types.submodule {
     options = {
@@ -36,10 +54,6 @@ let
       };
       themes-dir = lib.mkOption {
         type = lib.types.str;
-      };
-      hooks = lib.mkOption {
-        type = lib.types.str;
-        default = "";
       };
       supported-systems = lib.mkOption {
         type = lib.types.listOf (
@@ -64,7 +78,7 @@ let
           cp -r $src/* $out/${v.name}
         '';
       }
-    ) cfg.items;
+    ) items;
   };
   tintyType = lib.types.submodule {
     options = {
@@ -75,7 +89,10 @@ let
       };
       package = lib.mkPackageOption selfPkgs' "tinty" { };
       shell = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.enum [
+          "bash"
+          "zsh"
+        ];
         default = "bash";
       };
       scheme = lib.mkOption {
@@ -95,8 +112,61 @@ let
         type = lib.types.listOf itemType;
         default = [ ];
       };
+      themes = {
+        shell = {
+          enable = lib.mkEnableOption "Enable tinty for Shell";
+          repo = lib.mkOption {
+            type = lib.types.path;
+            default = pkgs.fetchFromGitHub {
+              owner = "tinted-theming";
+              repo = "tinted-shell";
+              rev = "60c80f53cd3d97c25eb0580e40f0b9de84dac55f";
+              hash = "sha256-eyZKShUpeIAoxhVsHAm2eqYvMp5e15NtbVrjMWFqtF8=";
+            };
+          };
+        };
+        alacritty = {
+          enable = lib.mkEnableOption "Enable tinty for Alacritty";
+          repo = lib.mkOption {
+            type = lib.types.path;
+            default = "";
+          };
+        };
+      };
     };
   };
+  homeDir =
+    pkgs.runCommand "tinty"
+      {
+        nativeBuildInputs = [ cfg.package ];
+      }
+      (
+        ''
+          mkdir -p $out/.local/share/tinted-theming/tinty/repos
+          export HOME=$out
+          export XDG_DATA_HOME=$out/.local/share
+          mkdir -p $out/.config/tinted-theming/tinty
+          export XDG_CONFIG_HOME=$out/.config
+          cp ${cfgFile} $out/.config/tinted-theming/tinty/config.toml
+          cp -r ${repos}/* $XDG_DATA_HOME/tinted-theming/tinty/repos
+          find $XDG_DATA_HOME/tinted-theming/tinty/repos -type d -exec chmod 755 {} \;
+          cp -r ${tintySchemes} $XDG_DATA_HOME/tinted-theming/tinty/repos/schemes
+          ${
+            if (config.theme.wallpaper.file != null) then
+              ''
+                tinty generate-scheme --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
+              ''
+            else
+              ""
+          }
+        ''
+        + lib.strings.concatLines (
+          builtins.map (v: ''tinty build $XDG_DATA_HOME/tinted-theming/tinty/repos/${v.name}'') cfg.items
+        )
+        + ''
+          tinty apply ${cfg.scheme}
+        ''
+      );
 in
 {
   options = {
@@ -108,54 +178,27 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    home = {
-      packages = [ cfg.package ];
-      activation = {
-        tintyApply = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-          (
-          export XDG_CONFIG_HOME=${lib.escapeShellArg config.xdg.configHome}
-          export XDG_DATA_HOME=${lib.escapeShellArg config.xdg.dataHome}
-          verboseEcho "Applying tinty theme"
-          cd "${pkgs.emptyDirectory}"
-          run ${lib.getExe cfg.package} apply ${cfg.scheme}
-          )
+    programs = {
+      alacritty = lib.mkIf (config.programs.alacritty.enable && cfg.themes.alacitty.enable) {
+        settings = {
+          import = "${homeDir}/.config/tinted-theming/tinty/repos/tinted-alacritty/colors-256/${cfg.scheme}.toml";
+        };
+      };
+      zsh = lib.mkIf (config.programs.zsh.enable && cfg.themes.shell.enable && cfg.shell == "zsh") {
+        sessionVariables = {
+          TINTED_SHELL_ENABLE_BASE24_VARS = 1;
+        };
+        initExtra = ''
+          source ${homeDir}/.config/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh}
         '';
       };
-    };
-    xdg = {
-      configFile = {
-        "tinted-theming/tinty/config.toml" = {
-          source = cfgFile;
+      bash = lib.mkIf (config.programs.bash.enable && cfg.themes.shell.enable && cfg.shell == "bash") {
+        sessionVariables = {
+          TINTED_SHELL_ENABLE_BASE24_VARS = 1;
         };
-      };
-      dataFile = {
-        "tinted-theming/tinty/" = {
-          source =
-            pkgs.runCommand "tinty"
-              {
-                nativeBuildInputs = [ cfg.package ];
-              }
-              (
-                ''
-                  mkdir -p $out/repos
-                  cp -r ${repos}/* $out/repos
-                  find $out/repos -type d -exec chmod 755 {} \;
-                  cp -r ${tintySchemes} $out/repos/schemes
-                  ${
-                    if (config.theme.wallpaper.file != null) then
-                      ''
-                        tinty generate-scheme --config ${cfgFile} --data-dir $out --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
-                      ''
-                    else
-                      ""
-                  }
-                  tinty install --config ${cfgFile} --data-dir $out
-                ''
-                + lib.strings.concatLines (
-                  builtins.map (v: ''tinty build --config ${cfgFile} --data-dir $out $out/repos/${v.name}'') cfg.items
-                )
-              );
-        };
+        initExtra = ''
+          source ${homeDir}/.config/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh
+        '';
       };
     };
   };
