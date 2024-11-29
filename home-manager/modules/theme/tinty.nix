@@ -41,30 +41,6 @@ let
     default-scheme = cfg.scheme;
     items = itemsForCfg;
   };
-  itemType = lib.types.submodule {
-    options = {
-      name = lib.mkOption {
-        type = lib.types.str;
-      };
-      path = lib.mkOption {
-        type = lib.types.path;
-      };
-      url = lib.mkOption {
-        type = lib.types.str;
-      };
-      themes-dir = lib.mkOption {
-        type = lib.types.str;
-      };
-      supported-systems = lib.mkOption {
-        type = lib.types.listOf (
-          lib.types.enum [
-            "base16"
-            "base24"
-          ]
-        );
-      };
-    };
-  };
   repos = pkgs.symlinkJoin {
     name = "repos";
     paths = builtins.map (
