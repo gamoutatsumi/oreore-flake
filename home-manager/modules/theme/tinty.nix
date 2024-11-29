@@ -11,8 +11,8 @@ let
   cfg = config.theme.tinty;
   settingsFormat = pkgs.formats.toml { };
   genCfgFile = settings: settingsFormat.generate "config.toml" (settings // cfg.settings);
-  items = cfg': [
-    (lib.mkIf (cfg.themes.alacritty.enable) {
+  items = [
+    (lib.optionalAttrs (cfg.themes.alacritty.enable) {
       name = "tinted-alacritty";
       path = cfg.themes.alacritty.repo;
       url = "https://github.com/tinted-theming/tinted-alacritty";
@@ -22,7 +22,7 @@ let
         "base24"
       ];
     })
-    (lib.mkIf (cfg.themes.shell.enable) {
+    (lib.optionalAttrs (cfg.themes.shell.enable) {
       name = "tinted-shell";
       path = cfg.themes.shell.repo;
       url = "https://github.com/tinted-theming/tinted-shell";
@@ -35,7 +35,7 @@ let
     path = v.url;
     themes-dir = v.themes-dir;
     supported-systems = v.supported-systems;
-  }) (items cfg);
+  }) items;
   cfgFile = genCfgFile {
     shell = "${cfg.shell} -c '{}'";
     default-scheme = cfg.scheme;
