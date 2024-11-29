@@ -168,7 +168,7 @@ in
     programs = {
       alacritty = lib.mkIf (config.programs.alacritty.enable && cfg.themes.alacritty.enable) {
         settings = {
-          import = "${homeDir}/.config/tinted-theming/tinty/repos/tinted-alacritty/colors-256/${cfg.scheme}.toml";
+          import = "${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-alacritty/colors-256/${cfg.scheme}.toml";
         };
       };
       zsh = lib.mkIf (config.programs.zsh.enable && cfg.themes.shell.enable && cfg.shell == "zsh") {
@@ -176,7 +176,7 @@ in
           TINTED_SHELL_ENABLE_BASE24_VARS = 1;
         };
         initExtra = ''
-          source ${homeDir}/.config/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh}
+          source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh}
         '';
       };
       bash = lib.mkIf (config.programs.bash.enable && cfg.themes.shell.enable && cfg.shell == "bash") {
@@ -184,7 +184,7 @@ in
           TINTED_SHELL_ENABLE_BASE24_VARS = 1;
         };
         initExtra = ''
-          source ${homeDir}/.config/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh
+          source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh
         '';
       };
     };
