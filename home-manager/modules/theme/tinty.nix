@@ -80,6 +80,34 @@ let
       }
     ) items;
   };
+  themesType = lib.types.submodule {
+    options = {
+      shell = {
+        enable = lib.mkEnableOption "Enable tinty for Shell";
+        repo = lib.mkOption {
+          type = lib.types.path;
+          default = pkgs.fetchFromGitHub {
+            owner = "tinted-theming";
+            repo = "tinted-shell";
+            rev = "60c80f53cd3d97c25eb0580e40f0b9de84dac55f";
+            hash = "sha256-eyZKShUpeIAoxhVsHAm2eqYvMp5e15NtbVrjMWFqtF8=";
+          };
+        };
+      };
+      alacritty = {
+        enable = lib.mkEnableOption "Enable tinty for Alacritty";
+        repo = lib.mkOption {
+          type = lib.types.path;
+          default = pkgs.fetchFromGitHub {
+            owner = "tinted-theming";
+            repo = "tinted-alacritty";
+            rev = "97cd85d428adb491c6f6cf8b96663b1b4fd98561";
+            hash = "sha256-Z2z7bFOBPauNEMFEA/5F6kdahTTypMt9JFTQ7yZkY6Y=";
+          };
+        };
+      };
+    };
+  };
   tintyType = lib.types.submodule {
     options = {
       enable = lib.mkEnableOption "Enable tinty for Tinted-Theming (base16 / base24)";
@@ -108,30 +136,9 @@ let
           default = "light";
         };
       };
-      items = lib.mkOption {
-        type = lib.types.listOf itemType;
-        default = [ ];
-      };
-      themes = {
-        shell = {
-          enable = lib.mkEnableOption "Enable tinty for Shell";
-          repo = lib.mkOption {
-            type = lib.types.path;
-            default = pkgs.fetchFromGitHub {
-              owner = "tinted-theming";
-              repo = "tinted-shell";
-              rev = "60c80f53cd3d97c25eb0580e40f0b9de84dac55f";
-              hash = "sha256-eyZKShUpeIAoxhVsHAm2eqYvMp5e15NtbVrjMWFqtF8=";
-            };
-          };
-        };
-        alacritty = {
-          enable = lib.mkEnableOption "Enable tinty for Alacritty";
-          repo = lib.mkOption {
-            type = lib.types.path;
-            default = "";
-          };
-        };
+      themes = lib.mkOption {
+        type = themesType;
+        default = { };
       };
     };
   };
@@ -161,7 +168,7 @@ let
           }
         ''
         + lib.strings.concatLines (
-          builtins.map (v: ''tinty build $XDG_DATA_HOME/tinted-theming/tinty/repos/${v.name}'') cfg.items
+          builtins.map (v: ''tinty build $XDG_DATA_HOME/tinted-theming/tinty/repos/${v.name}'') items
         )
         + ''
           tinty apply ${cfg.scheme}
@@ -179,7 +186,7 @@ in
   };
   config = lib.mkIf cfg.enable {
     programs = {
-      alacritty = lib.mkIf (config.programs.alacritty.enable && cfg.themes.alacitty.enable) {
+      alacritty = lib.mkIf (config.programs.alacritty.enable && cfg.themes.alacritty.enable) {
         settings = {
           import = "${homeDir}/.config/tinted-theming/tinty/repos/tinted-alacritty/colors-256/${cfg.scheme}.toml";
         };
