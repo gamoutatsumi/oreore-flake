@@ -178,7 +178,7 @@ in
           TINTED_SHELL_ENABLE_BASE24_VARS = 1;
         };
         initExtra = ''
-          source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh}
+          source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh
         '';
       };
       bash = lib.mkIf (config.programs.bash.enable && cfg.themes.shell.enable && cfg.shell == "bash") {
