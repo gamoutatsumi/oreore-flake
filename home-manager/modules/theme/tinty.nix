@@ -168,7 +168,9 @@ in
     programs = {
       alacritty = lib.mkIf (config.programs.alacritty.enable && cfg.themes.alacritty.enable) {
         settings = {
-          import = "${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-alacritty/colors-256/${cfg.scheme}.toml";
+          import = [
+            "${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-alacritty/colors-256/${cfg.scheme}.toml"
+          ];
         };
       };
       zsh = lib.mkIf (config.programs.zsh.enable && cfg.themes.shell.enable && cfg.shell == "zsh") {
