@@ -11,25 +11,29 @@ let
   cfg = config.theme.tinty;
   settingsFormat = pkgs.formats.toml { };
   genCfgFile = settings: settingsFormat.generate "config.toml" (settings // cfg.settings);
-  items = [
-    (lib.optionalAttrs (cfg.themes.alacritty.enable) {
-      name = "tinted-alacritty";
-      path = cfg.themes.alacritty.repo;
-      url = "https://github.com/tinted-theming/tinted-alacritty";
-      themes-dir = "colors-256";
-      supported-systems = [
-        "base16"
-        "base24"
-      ];
-    })
-    (lib.optionalAttrs (cfg.themes.shell.enable) {
-      name = "tinted-shell";
-      path = cfg.themes.shell.repo;
-      url = "https://github.com/tinted-theming/tinted-shell";
-      themes-dir = "scripts";
-      supported-systems = [ "base16" ];
-    })
-  ];
+  items =
+    [ ]
+    ++ (lib.optionals (cfg.themes.alacritty.enable) [
+      {
+        name = "tinted-alacritty";
+        path = cfg.themes.alacritty.repo;
+        url = "https://github.com/tinted-theming/tinted-alacritty";
+        themes-dir = "colors-256";
+        supported-systems = [
+          "base16"
+          "base24"
+        ];
+      }
+    ])
+    ++ (lib.optionals (cfg.themes.shell.enable) [
+      {
+        name = "tinted-shell";
+        path = cfg.themes.shell.repo;
+        url = "https://github.com/tinted-theming/tinted-shell";
+        themes-dir = "scripts";
+        supported-systems = [ "base16" ];
+      }
+    ]);
   itemsForCfg = builtins.map (v: {
     name = v.name;
     path = v.url;
