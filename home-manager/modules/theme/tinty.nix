@@ -166,6 +166,13 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    home = {
+      packages = [
+        (pkgs.writeShellScriptBin "tinty" ''
+          XDG_CONFIG_HOME=${homeDir}/.config ${cfg.package}/bin/tinty --config ${cfgFile} --data-dir ${homeDir}/.local/share/tinted-theming/tinty "$@"
+        '')
+      ];
+    };
     programs = {
       alacritty = lib.mkIf (config.programs.alacritty.enable && cfg.themes.alacritty.enable) {
         settings = {
