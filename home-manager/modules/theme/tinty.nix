@@ -23,7 +23,6 @@ let
           "base16"
           "base24"
         ];
-        hooks = '''';
       }
     ])
     ++ (lib.optionals (cfg.themes.shell.enable) [
@@ -33,9 +32,6 @@ let
         url = "https://github.com/tinted-theming/tinted-shell";
         themes-dir = "scripts";
         supported-systems = [ "base16" ];
-        hooks = ''
-          $out/.local/share/tinted-theming/tinty/repos/tinted-shell/hooks/base16-delta.sh
-        '';
       }
     ]);
   itemsForCfg = builtins.map (v: {
@@ -158,7 +154,6 @@ let
         + ''
           tinty apply ${cfg.scheme}
         ''
-        + lib.strings.concatLines (builtins.map (v: ''${v.hooks}'') items)
       );
 in
 {
@@ -199,13 +194,16 @@ in
           source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh
         '';
       };
-      git = lib.mkIf (config.programs.git.enable && cfg.themes.shell.enable) {
-        extraConfig = {
-          include = {
-            path = "${homeDir}/.config/tinted-theming/tinty/delta.gitconfig";
+      git =
+        lib.mkIf (config.programs.git.enable && config.programs.git.delta.enable && cfg.themes.shell.enable)
+          {
+            delta = {
+              options = {
+                syntax-theme = "ansi";
+                light = (cfg.generate.variant == "light");
+              };
+            };
           };
-        };
-      };
     };
   };
 }
