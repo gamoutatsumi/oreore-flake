@@ -32,6 +32,9 @@ let
         url = "https://github.com/tinted-theming/tinted-shell";
         themes-dir = "scripts";
         supported-systems = [ "base16" ];
+        hooks = ''
+          source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/hooks/base16-delta.sh
+        '';
       }
     ]);
   itemsForCfg = builtins.map (v: {
@@ -39,6 +42,7 @@ let
     path = v.url;
     themes-dir = v.themes-dir;
     supported-systems = v.supported-systems;
+    hooks = v.hooks;
   }) items;
   cfgFile = genCfgFile {
     shell = "${cfg.shell} -c '{}'";
@@ -134,6 +138,7 @@ let
           export XDG_DATA_HOME=$out/.local/share
           mkdir -p $out/.config/tinted-theming/tinty
           export XDG_CONFIG_HOME=$out/.config
+          export BASE16_CONFIG_PATH=$out/.config/tinted-theming/tinty
           cp ${cfgFile} $out/.config/tinted-theming/tinty/config.toml
           cp -r ${repos}/* $XDG_DATA_HOME/tinted-theming/tinty/repos
           find $XDG_DATA_HOME/tinted-theming/tinty/repos -type d -exec chmod 755 {} \;
@@ -177,6 +182,7 @@ in
       };
       zsh = lib.mkIf (config.programs.zsh.enable && cfg.themes.shell.enable && cfg.shell == "zsh") {
         sessionVariables = {
+          TINTED_SHELL_ENABLE_VARS = 1;
           TINTED_SHELL_ENABLE_BASE24_VARS = 1;
         };
         initExtra = ''
@@ -185,11 +191,15 @@ in
       };
       bash = lib.mkIf (config.programs.bash.enable && cfg.themes.shell.enable && cfg.shell == "bash") {
         sessionVariables = {
+          TINTED_SHELL_ENABLE_VARS = 1;
           TINTED_SHELL_ENABLE_BASE24_VARS = 1;
         };
         initExtra = ''
           source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh
         '';
+      };
+      git = lib.mkIf (config.programs.git.enable && cfg.themes.shell.enable) {
+        include = "${homeDir}/.config/tinted-theming/tinty/delta.gitconfig";
       };
     };
   };
