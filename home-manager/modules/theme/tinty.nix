@@ -23,6 +23,7 @@ let
           "base16"
           "base24"
         ];
+        hooks = '''';
       }
     ])
     ++ (lib.optionals (cfg.themes.shell.enable) [
