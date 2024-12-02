@@ -34,7 +34,7 @@ let
         themes-dir = "scripts";
         supported-systems = [ "base16" ];
         hooks = ''
-          source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/hooks/base16-delta.sh
+          source $out/.local/share/tinted-theming/tinty/repos/tinted-shell/hooks/base16-delta.sh
         '';
       }
     ]);
