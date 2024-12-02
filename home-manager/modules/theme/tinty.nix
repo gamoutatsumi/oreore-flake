@@ -194,6 +194,11 @@ in
           source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh
         '';
       };
+      tmux = lib.mkIf (config.programs.tmux.enable && cfg.themes.shell.enable) {
+        extraConfig = ''
+          set -g allow-passthrough on
+        '';
+      };
       git =
         lib.mkIf (config.programs.git.enable && config.programs.git.delta.enable && cfg.themes.shell.enable)
           {
