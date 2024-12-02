@@ -31,7 +31,10 @@ let
         path = cfg.themes.shell.repo;
         url = "https://github.com/tinted-theming/tinted-shell";
         themes-dir = "scripts";
-        supported-systems = [ "base16" ];
+        supported-systems = [
+          "base16"
+          "base24"
+        ];
       }
     ]);
   itemsForCfg = builtins.map (v: {
