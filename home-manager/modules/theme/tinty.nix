@@ -201,7 +201,9 @@ in
       };
       git = lib.mkIf (config.programs.git.enable && cfg.themes.shell.enable) {
         extraConfig = {
-          include = "${homeDir}/.config/tinted-theming/tinty/delta.gitconfig";
+          include = {
+            path = "${homeDir}/.config/tinted-theming/tinty/delta.gitconfig";
+          };
         };
       };
     };
