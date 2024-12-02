@@ -200,7 +200,9 @@ in
         '';
       };
       git = lib.mkIf (config.programs.git.enable && cfg.themes.shell.enable) {
-        include = "${homeDir}/.config/tinted-theming/tinty/delta.gitconfig";
+        extraConfig = {
+          include = "${homeDir}/.config/tinted-theming/tinty/delta.gitconfig";
+        };
       };
     };
   };
