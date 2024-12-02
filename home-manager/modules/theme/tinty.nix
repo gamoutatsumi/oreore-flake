@@ -34,7 +34,7 @@ let
         themes-dir = "scripts";
         supported-systems = [ "base16" ];
         hooks = ''
-          source $out/.local/share/tinted-theming/tinty/repos/tinted-shell/hooks/base16-delta.sh
+          $out/.local/share/tinted-theming/tinty/repos/tinted-shell/hooks/base16-delta.sh
         '';
       }
     ]);
@@ -43,7 +43,6 @@ let
     path = v.url;
     themes-dir = v.themes-dir;
     supported-systems = v.supported-systems;
-    hooks = v.hooks;
   }) items;
   cfgFile = genCfgFile {
     shell = "${cfg.shell} -c '{}'";
@@ -159,6 +158,7 @@ let
         + ''
           tinty apply ${cfg.scheme}
         ''
+        + lib.strings.concatLines (builtins.map (v: ''${v.hooks}'') items)
       );
 in
 {
