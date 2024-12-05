@@ -108,7 +108,8 @@ let
       };
       scheme = lib.mkOption {
         type = lib.types.str;
-        default = if config.theme.wallpaper.file != null then "base24-wallpaper" else "base16-mocha";
+        default =
+          if config.theme.wallpaper.file != null then "${cfg.generate.system}-wallpaper" else "base16-mocha";
       };
       generate = {
         variant = lib.mkOption {
@@ -165,6 +166,7 @@ let
           tinty apply ${cfg.scheme}
         ''
       );
+  isBase24 = scheme: builtins.substring 0 6 scheme == "base24";
 in
 {
   options = {
@@ -196,7 +198,7 @@ in
       zsh = lib.mkIf (config.programs.zsh.enable && cfg.themes.shell.enable && cfg.shell == "zsh") {
         sessionVariables = {
           TINTED_SHELL_ENABLE_VARS = 1;
-          TINTED_SHELL_ENABLE_BASE24_VARS = if cfg.generate.system == "base24" then 1 else 0;
+          TINTED_SHELL_ENABLE_BASE24_VARS = if (isBase24 cfg.scheme) then 1 else 0;
         };
         initExtra = ''
           source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh
@@ -205,7 +207,7 @@ in
       bash = lib.mkIf (config.programs.bash.enable && cfg.themes.shell.enable && cfg.shell == "bash") {
         sessionVariables = {
           TINTED_SHELL_ENABLE_VARS = 1;
-          TINTED_SHELL_ENABLE_BASE24_VARS = 1;
+          TINTED_SHELL_ENABLE_BASE24_VARS = if (isBase24 cfg.scheme) then 1 else 0;
         };
         initExtra = ''
           source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh
