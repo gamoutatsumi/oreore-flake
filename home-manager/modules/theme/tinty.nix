@@ -118,6 +118,13 @@ let
           ];
           default = "light";
         };
+        system = lib.mkOption {
+          type = lib.types.enum [
+            "base16"
+            "base24"
+          ];
+          default = "base24";
+        };
       };
       themes = lib.mkOption {
         type = themesType;
@@ -145,7 +152,7 @@ let
           ${
             if (config.theme.wallpaper.file != null) then
               ''
-                tinty generate-scheme --system base24 --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
+                tinty generate-scheme --system ${cfg.generate.system} --name 'Wallpaper' --slug 'wallpaper' --variant ${cfg.generate.variant} --save ${config.theme.wallpaper.file}
               ''
             else
               ""
@@ -189,7 +196,7 @@ in
       zsh = lib.mkIf (config.programs.zsh.enable && cfg.themes.shell.enable && cfg.shell == "zsh") {
         sessionVariables = {
           TINTED_SHELL_ENABLE_VARS = 1;
-          TINTED_SHELL_ENABLE_BASE24_VARS = 1;
+          TINTED_SHELL_ENABLE_BASE24_VARS = if cfg.generate.system == "base24" then 1 else 0;
         };
         initExtra = ''
           source ${homeDir}/.local/share/tinted-theming/tinty/repos/tinted-shell/scripts/${cfg.scheme}.sh
