@@ -140,65 +140,15 @@
           ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ inputs.treefmt-nix.flakeModule ]
           ++ lib.optionals (inputs.devenv ? flakeModule) [ inputs.devenv.flakeModule ];
 
-        flake =
-          withSystem "x86_64-linux" (
-            {
-              pkgs,
-              system,
-              config,
-              ...
-            }:
-            {
-              _module = {
-                args = {
-                  pkgs = import inputs.nixpkgs-unstable {
-                    inherit system;
-                    overlays = [ rust-overlay.overlays.default ];
-                  };
-                };
-              };
-              packages = {
-                "${system}" =
-                  (import ./packages/linux { inherit pkgs lib; }) // (import ./packages/all { inherit pkgs lib; });
-              };
-              checks = {
-                "${system}" = config.packages;
-              };
-            }
-          )
-          // withSystem "aarch64-darwin" (
-            {
-              pkgs,
-              system,
-              config,
-              ...
-            }:
-            {
-              _module = {
-                args = {
-                  pkgs = import inputs.nixpkgs-unstable {
-                    inherit system;
-                    overlays = [ rust-overlay.overlays.default ];
-                  };
-                };
-              };
-              packages = {
-                "${system}" = import ./packages/all { inherit pkgs lib; };
-              };
-              checks = {
-                "${system}" = config.packages;
-              };
-            }
-          )
-          // ({
-            homeManagerModules = {
-              theme = importApply ./home-manager/modules/theme {
-                localFlake = self;
-                tintySchemes = tinty-schemes;
-                inherit withSystem importApply;
-              };
+        flake = ({
+          homeManagerModules = {
+            theme = importApply ./home-manager/modules/theme {
+              localFlake = self;
+              tintySchemes = tinty-schemes;
+              inherit withSystem importApply;
             };
-          });
+          };
+        });
         perSystem =
           {
             system,
@@ -215,6 +165,10 @@
                 };
               };
             };
+            checks = config.packages;
+            packages =
+              import ./packages/all { inherit pkgs lib; }
+              // lib.attrsets.optionalAttrs (pkgs.stdenv.isLinux) (import ./packages/linux { inherit pkgs lib; });
             overlayAttrs = self.packages."${system}";
             devShells = {
               default = pkgs.mkShell {

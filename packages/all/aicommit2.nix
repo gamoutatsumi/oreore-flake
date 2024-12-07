@@ -7,7 +7,7 @@ let
     owner = "tak-bro";
     repo = "aicommit2";
     rev = "v${version}";
-    hash = "sha256-eKMSvofwdAnKfrM8ybuNfF/gWSWzZLghuyiqEx46eyw=";
+    hash = "sha256-NBnm7KdGXmQ/yTCWJSMrMxMxLZtCgnH73M08b/S8oq8=";
     leaveDotGit = true;
   };
   pname = "aicommit2";
