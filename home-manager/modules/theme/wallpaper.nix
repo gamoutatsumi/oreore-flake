@@ -43,7 +43,6 @@ in
           flags = lib.concatStringsSep " " ([
             "--bg-${cfg.xdg.display}"
             "--no-fehbg"
-            "--no-xinerama"
           ]);
         in
         ''
