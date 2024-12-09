@@ -72,7 +72,6 @@
       {
         inputs,
         lib,
-        withSystem,
         flake-parts-lib,
         self,
         ...
@@ -92,7 +91,7 @@
             theme = importApply ./home-manager/modules/theme {
               localFlake = self;
               tintySchemes = tinty-schemes;
-              inherit withSystem importApply;
+              inherit importApply;
             };
           };
         };
