@@ -113,7 +113,6 @@
 
   outputs =
     {
-      self,
       flake-parts,
       systems,
       rust-overlay,
@@ -140,7 +139,7 @@
           ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ inputs.treefmt-nix.flakeModule ]
           ++ lib.optionals (inputs.devenv ? flakeModule) [ inputs.devenv.flakeModule ];
 
-        flake = ({
+        flake = {
           homeManagerModules = {
             theme = importApply ./home-manager/modules/theme {
               localFlake = self;
@@ -148,7 +147,7 @@
               inherit withSystem importApply;
             };
           };
-        });
+        };
         perSystem =
           {
             system,
@@ -171,7 +170,7 @@
             checks = config.packages;
             packages =
               import ./packages/all { inherit pkgs lib; }
-              // lib.attrsets.optionalAttrs (pkgs.stdenv.isLinux) (import ./packages/linux { inherit pkgs lib; });
+              // lib.attrsets.optionalAttrs pkgs.stdenv.isLinux (import ./packages/linux { inherit pkgs lib; });
             overlayAttrs = self.packages."${system}";
             devShells = {
               default = pkgs.mkShell {
@@ -180,8 +179,7 @@
                   efm-langserver
                 ];
                 inputsFrom =
-                  [ ]
-                  ++ lib.optionals (inputs.pre-commit-hooks ? flakeModule) [ config.pre-commit.devShell ]
+                  lib.optionals (inputs.pre-commit-hooks ? flakeModule) [ config.pre-commit.devShell ]
                   ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ treefmtBuild.devShell ];
               };
             };
@@ -194,12 +192,23 @@
               settings = {
                 src = ./.;
                 hooks = {
+                  # keep-sorted start block=yes
+                  deadnix = {
+                    enable = true;
+                  };
+                  flake-checker = {
+                    enable = false;
+                  };
+                  statix = {
+                    enable = true;
+                  };
                   treefmt = {
                     enable = true;
                     packageOverrides = {
                       treefmt = treefmtBuild.wrapper;
                     };
                   };
+                  # keep-sorted end
                 };
               };
             };

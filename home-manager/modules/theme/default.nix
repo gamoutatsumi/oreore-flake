@@ -1,10 +1,9 @@
 {
   localFlake,
-  withSystem,
   importApply,
   tintySchemes,
 }:
-{ lib, ... }:
+{ ... }:
 {
   imports = [
     ./wallpaper.nix

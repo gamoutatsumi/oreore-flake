@@ -40,10 +40,10 @@ in
     xsession = lib.mkIf config.xsession.enable {
       initExtra =
         let
-          flags = lib.concatStringsSep " " ([
+          flags = lib.concatStringsSep " " [
             "--bg-${cfg.xdg.display}"
             "--no-fehbg"
-          ]);
+          ];
         in
         ''
           ${pkgs.feh}/bin/feh ${flags} ${cfg.file} &

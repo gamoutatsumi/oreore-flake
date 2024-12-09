@@ -45,6 +45,6 @@ pkgs.stdenv.mkDerivation {
   '';
   meta = {
     license = lib.licenses.mit;
-    platforms = nodejs.meta.platforms;
+    inherit (nodejs.meta) platforms;
   };
 }

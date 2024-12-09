@@ -12,8 +12,7 @@ let
   settingsFormat = pkgs.formats.toml { };
   genCfgFile = settings: settingsFormat.generate "config.toml" (settings // cfg.settings);
   items =
-    [ ]
-    ++ (lib.optionals (cfg.themes.alacritty.enable) [
+    (lib.optionals cfg.themes.alacritty.enable [
       {
         name = "tinted-alacritty";
         path = cfg.themes.alacritty.repo;
@@ -25,7 +24,7 @@ let
         ];
       }
     ])
-    ++ (lib.optionals (cfg.themes.shell.enable) [
+    ++ (lib.optionals cfg.themes.shell.enable [
       {
         name = "tinted-shell";
         path = cfg.themes.shell.repo;
@@ -38,10 +37,10 @@ let
       }
     ]);
   itemsForCfg = builtins.map (v: {
-    name = v.name;
+    inherit (v) name;
     path = v.url;
-    themes-dir = v.themes-dir;
-    supported-systems = v.supported-systems;
+    inherit (v) themes-dir;
+    inherit (v) supported-systems;
   }) items;
   cfgFile = genCfgFile {
     shell = "${cfg.shell} -c '{}'";
@@ -95,7 +94,7 @@ let
     options = {
       enable = lib.mkEnableOption "Enable tinty for Tinted-Theming (base16 / base24)";
       settings = lib.mkOption {
-        type = settingsFormat.type;
+        inherit (settingsFormat) type;
         default = { };
       };
       package = lib.mkPackageOption selfPkgs' "tinty" { };
@@ -224,7 +223,7 @@ in
             delta = {
               options = {
                 syntax-theme = "ansi";
-                light = (cfg.generate.variant == "light");
+                light = cfg.generate.variant == "light";
               };
             };
           };
