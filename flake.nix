@@ -174,12 +174,12 @@
               default = pkgs.mkShell {
                 packages = with pkgs; [
                   nil
-                  nixfmt-rfc-style
                   efm-langserver
                 ];
                 inputsFrom =
                   [ ]
-                  ++ lib.optionals (inputs.pre-commit-hooks ? flakeModule) [ config.pre-commit.devShell ];
+                  ++ lib.optionals (inputs.pre-commit-hooks ? flakeModule) [ config.pre-commit.devShell ]
+                  ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ config.treefmt.build.devShell ];
               };
             };
           }
@@ -211,6 +211,7 @@
                 };
                 nixfmt = {
                   enable = true;
+                  package = pkgs.nixfmt-rfc-style;
                 };
                 shfmt = {
                   enable = true;
