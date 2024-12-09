@@ -156,6 +156,9 @@
             config,
             ...
           }:
+          let
+            treefmtBuild = config.treefmt.build;
+          in
           {
             _module = {
               args = {
@@ -179,7 +182,7 @@
                 inputsFrom =
                   [ ]
                   ++ lib.optionals (inputs.pre-commit-hooks ? flakeModule) [ config.pre-commit.devShell ]
-                  ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ config.treefmt.build.devShell ];
+                  ++ lib.optionals (inputs.treefmt-nix ? flakeModule) [ treefmtBuild.devShell ];
               };
             };
           }
@@ -193,14 +196,16 @@
                 hooks = {
                   treefmt = {
                     enable = true;
-                    packageOverrides.treefmt = config.treefmt.build.wrapper;
+                    packageOverrides = {
+                      treefmt = treefmtBuild.wrapper;
+                    };
                   };
                 };
               };
             };
           }
           // lib.optionalAttrs (inputs.treefmt-nix ? flakeModule) {
-            formatter = config.treefmt.build.wrapper;
+            formatter = treefmtBuild.wrapper;
             treefmt = {
               projectRootFile = "flake.nix";
               flakeCheck = false;
