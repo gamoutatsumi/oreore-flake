@@ -3,6 +3,28 @@
 
   inputs = {
     # keep-sorted start block=yes
+    fenix = {
+      url = "https://flakehub.com/f/nix-community/fenix/0.1.*";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
+    flake-checker = {
+      url = "github:DeterminateSystems/flake-checker";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+        fenix = {
+          follows = "fenix";
+        };
+        naersk = {
+          follows = "naersk";
+        };
+      };
+    };
     flake-compat = {
       url = "github:edolstra/flake-compat";
     };
@@ -10,6 +32,14 @@
       url = "github:hercules-ci/flake-parts";
       inputs = {
         nixpkgs-lib = {
+          follows = "nixpkgs";
+        };
+      };
+    };
+    naersk = {
+      url = "https://flakehub.com/f/nix-community/naersk/0.1.*";
+      inputs = {
+        nixpkgs = {
           follows = "nixpkgs";
         };
       };
@@ -64,6 +94,7 @@
     {
       flake-parts,
       systems,
+      flake-checker,
       rust-overlay,
       tinty-schemes,
       ...
@@ -144,7 +175,8 @@
                     enable = true;
                   };
                   flake-checker = {
-                    enable = false;
+                    enable = true;
+                    package = flake-checker.packages.${system}.flake-checker;
                   };
                   statix = {
                     enable = true;
