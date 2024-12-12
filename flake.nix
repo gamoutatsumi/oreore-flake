@@ -209,6 +209,9 @@
                 shfmt = {
                   enable = true;
                 };
+                taplo = {
+                  enable = true;
+                };
                 # keep-sorted end
               };
             };
