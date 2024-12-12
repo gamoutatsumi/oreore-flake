@@ -1,9 +1,12 @@
 {
-  pkgs,
+  # keep-sorted start
+  installShellFiles,
+  lib,
   makeRustPlatform,
   rust-bin,
-  lib,
-  installShellFiles,
+  sources,
+  # keep-sorted end
+  ...
 }:
 let
   toolchain = rust-bin.stable.latest.default;
@@ -11,17 +14,9 @@ let
     cargo = toolchain;
     rustc = toolchain;
   };
-  version = "0.23.0";
-  pname = "tinty";
-  src = pkgs.fetchFromGitHub {
-    owner = "tinted-theming";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-5KrXvE+RLkypqKg01Os09XGxrqv0fCMkeSD//E5WrZc=";
-  };
 in
-rustPlatform.buildRustPackage {
-  inherit version pname src;
+rustPlatform.buildRustPackage rec {
+  inherit (sources.tinty) version pname src;
   cargoLock = {
     lockFile = "${src}/Cargo.lock";
   };

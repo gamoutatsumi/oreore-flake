@@ -155,6 +155,7 @@
                 packages = with pkgs; [
                   nil
                   efm-langserver
+                  nvfetcher
                 ];
                 inputsFrom =
                   lib.optionals (inputs.pre-commit-hooks ? flakeModule) [ config.pre-commit.devShell ]
@@ -171,15 +172,9 @@
                 src = ./.;
                 hooks = {
                   # keep-sorted start block=yes
-                  deadnix = {
-                    enable = true;
-                  };
                   flake-checker = {
                     enable = true;
                     package = flake-checker.packages.${system}.flake-checker;
-                  };
-                  statix = {
-                    enable = true;
                   };
                   treefmt = {
                     enable = true;
@@ -199,6 +194,9 @@
               flakeCheck = false;
               programs = {
                 # keep-sorted start block=yes
+                deadnix = {
+                  enable = true;
+                };
                 keep-sorted = {
                   enable = true;
                 };
@@ -207,6 +205,9 @@
                   package = pkgs.nixfmt-rfc-style;
                 };
                 shfmt = {
+                  enable = true;
+                };
+                statix = {
                   enable = true;
                 };
                 taplo = {
