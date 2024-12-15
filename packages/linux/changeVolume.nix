@@ -3,7 +3,7 @@
 pkgs.writeShellApplication {
   name = "changeVolume";
   runtimeInputs = [
-    pkgs.pulseaudio
+    pkgs.wireplumber
     pkgs.dunst
     pkgs.bc
     pkgs.gnused
@@ -38,21 +38,20 @@ pkgs.writeShellApplication {
     # Arbitrary but unique message id
 
     if [[ "''$1" == "mute" ]]; then
-      pactl set-sink-mute @DEFAULT_SINK@ toggle
+      wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
     else
-      pactl -- set-sink-volume @DEFAULT_SINK@ "''$@"
+      wpctl set-volume @DEFAULT_AUDIO_SINK@ "''$@"
     fi
 
-    default_sink="''$(LANG=C LC_ALL=C pactl info | grep "^Default Sink" | awk '{print ''$3}')"
-    volume="''$(LANG=C LC_ALL=C pactl list sinks | grep "Name: ''${default_sink}" -A 10 | grep '^[[:space:]]Volume:' | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')"
-    mute="''$(LANG=C LC_ALL=C pactl list sinks | grep "Name: ''${default_sink}" -A 10 | grep 'Mute:' | sed 's/^[[:space:]]//' | cut -d " " -f 2)"
-    if [[ ''$volume == 0 || "''$mute" == "yes" ]]; then
+    volume="''$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed "s/Volume: //g")"
+    if [[ ''${volume} == '0.00' || "''${volume}" == *"[MUTED]"* ]]; then
         # Show the sound muted notification
         dunstify -h string:x-dunst-stack-tag:volume -a "changeVolume" -u low -i "audio-volume-muted-symbolic" "Volume muted"
     else
         # Show the volume notification
+        volume_percentage=''$(echo "''${volume} * 100" | bc | awk '{print int($1)}')
         dunstify -h string:x-dunst-stack-tag:volume -a "changeVolume" -u low -i "audio-volume-high-symbolic" \
-        "Volume: ''${volume}%" "''$(getProgressString 10 "<b> </b>" "　" "''${volume}")"
+        "Volume: ''${volume_percentage}%" "''$(getProgressString 10 "<b> </b>" "　" "''${volume_percentage}")"
     fi
   '';
 }
