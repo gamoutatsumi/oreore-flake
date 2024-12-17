@@ -152,6 +152,13 @@
             overlayAttrs = self.packages."${system}";
             devShells = {
               default = pkgs.mkShell {
+                PFPATH = "${
+                  pkgs.buildEnv {
+                    name = "zsh-comp";
+                    paths = config.devShells.default.nativeBuildInputs;
+                    pathsToLink = [ "/share/zsh" ];
+                  }
+                }/share/zsh/site-functions";
                 packages = with pkgs; [
                   nil
                   efm-langserver
