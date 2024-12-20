@@ -203,6 +203,7 @@
                 # keep-sorted start block=yes
                 deadnix = {
                   enable = true;
+                  no-lambda-pattern-names = true;
                 };
                 keep-sorted = {
                   enable = true;
