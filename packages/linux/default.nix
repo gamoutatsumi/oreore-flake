@@ -1,13 +1,16 @@
 { pkgs, lib, ... }:
 lib.genAttrs [
+  # keep-sorted start
   "changeBrightness"
-  "toggleMicMute"
+  "changeVolume"
+  "getPulseVolume"
+  "launchPolybar"
   "maimFull"
   "maimSelect"
+  "mfcj7100cdw-cups"
   "playerctlStatus"
-  "getPulseVolume"
-  "changeVolume"
-  "launchPolybar"
   "rofiSystem"
+  "toggleMicMute"
   "xmonadpropread"
+  # keep-sorted end
 ] (name: pkgs.callPackage ./${name}.nix { })
