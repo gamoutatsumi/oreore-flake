@@ -33,10 +33,10 @@
             "name": null,
             "owner": "tinted-theming",
             "repo": "tinty",
-            "rev": "v0.23.0",
-            "sha256": "sha256-5KrXvE+RLkypqKg01Os09XGxrqv0fCMkeSD//E5WrZc=",
+            "rev": "v0.24.0",
+            "sha256": "sha256-Yvwls9bh8YN8/jKC889soCSotLSBU9hJWz95szOdJ2k=",
             "type": "github"
         },
-        "version": "v0.23.0"
+        "version": "v0.24.0"
     }
 }

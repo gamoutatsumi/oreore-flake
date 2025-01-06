@@ -14,13 +14,13 @@
   };
   tinty = {
     pname = "tinty";
-    version = "v0.23.0";
+    version = "v0.24.0";
     src = fetchFromGitHub {
       owner = "tinted-theming";
       repo = "tinty";
-      rev = "v0.23.0";
+      rev = "v0.24.0";
       fetchSubmodules = false;
-      sha256 = "sha256-5KrXvE+RLkypqKg01Os09XGxrqv0fCMkeSD//E5WrZc=";
+      sha256 = "sha256-Yvwls9bh8YN8/jKC889soCSotLSBU9hJWz95szOdJ2k=";
     };
   };
 }
