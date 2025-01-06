@@ -56,9 +56,6 @@
         nixpkgs = {
           follows = "nixpkgs-unstable";
         };
-        nixpkgs-stable = {
-          follows = "nixpkgs";
-        };
         flake-compat = {
           follows = "flake-compat";
         };
