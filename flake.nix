@@ -179,7 +179,7 @@
                 src = ./.;
                 hooks = {
                   # keep-sorted start block=yes
-                  flake-checker = {
+                  flake-checker = lib.optionalAttrs (inputs.flake-checker ? packages) {
                     enable = true;
                     package = flake-checker.packages.${system}.flake-checker;
                   };
