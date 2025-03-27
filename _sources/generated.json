@@ -1,9 +1,9 @@
 {
-    "aicommit2": {
+    "mcp-hub": {
         "cargoLocks": null,
         "date": null,
         "extract": null,
-        "name": "aicommit2",
+        "name": "mcp-hub",
         "passthru": null,
         "pinned": false,
         "src": {
@@ -11,13 +11,14 @@
             "fetchSubmodules": false,
             "leaveDotGit": false,
             "name": null,
-            "owner": "tak-bro",
-            "repo": "aicommit2",
-            "rev": "v2.1.11",
-            "sha256": "sha256-Q7VTcCtq4ix5evrLSUocNmzGX5brBfkRTn/0Jh8Tq9Y=",
+            "owner": "ravitemer",
+            "repo": "mcp-hub",
+            "rev": "v1.7.3",
+            "sha256": "sha256-IjLCPP4vNjdO1I9vNrovIhd86KGoHEp8h99V5jRtKLg=",
+            "sparseCheckout": [],
             "type": "github"
         },
-        "version": "v2.1.11"
+        "version": "v1.7.3"
     },
     "tinty": {
         "cargoLocks": null,
@@ -33,10 +34,11 @@
             "name": null,
             "owner": "tinted-theming",
             "repo": "tinty",
-            "rev": "v0.24.0",
-            "sha256": "sha256-Yvwls9bh8YN8/jKC889soCSotLSBU9hJWz95szOdJ2k=",
+            "rev": "v0.26.1",
+            "sha256": "sha256-+HTdmAKsm9YXyLktAfjPenbRi1RrrCusc6+ZarCI7Ac=",
+            "sparseCheckout": [],
             "type": "github"
         },
-        "version": "v0.24.0"
+        "version": "v0.26.1"
     }
 }

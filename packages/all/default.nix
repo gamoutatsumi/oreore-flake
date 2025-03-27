@@ -3,6 +3,6 @@ let
   sources = pkgs.callPackage ../../_sources/generated.nix { };
 in
 lib.genAttrs [
-  "aicommit2"
   "tinty"
+  "mcp-hub"
 ] (name: pkgs.callPackage ./${name}.nix { inherit sources; })
