@@ -46,7 +46,7 @@ in
           ];
         in
         ''
-          ${pkgs.feh}/bin/feh ${flags} ${cfg.file} &
+          ${lib.getExe pkgs.feh} ${flags} ${cfg.file} &
         '';
     };
   };

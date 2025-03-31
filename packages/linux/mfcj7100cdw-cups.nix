@@ -35,7 +35,7 @@ pkgs.stdenv.mkDerivation {
 
     substituteInPlace $out/opt/brother/Printers/mfcj7100cdw/lpd/filter_mfcj7100cdw \
       --replace /opt "$out/opt" \
-      --replace /usr/bin/perl ${pkgs.perl}/bin/perl \
+      --replace /usr/bin/perl ${lib.getExe pkgs.perl} \
       --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out\"; #" \
       --replace "PRINTER =~" "PRINTER = \"mfcj7100cdw\"; #"
 

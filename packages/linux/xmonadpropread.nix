@@ -13,7 +13,7 @@ pkgs.stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    ${xmonadpropreadEnv}/bin/ghc -o $out/bin/xmonadpropread \
+    ${lib.getExe' xmonadpropreadEnv "ghc"} -o $out/bin/xmonadpropread \
       --make scripts/xmonadpropread.hs
     runHook postInstall
   '';

@@ -180,7 +180,7 @@ in
     home = {
       packages = [
         (pkgs.writeShellScriptBin "tinty" ''
-          XDG_CONFIG_HOME=${homeDir}/.config ${cfg.package}/bin/tinty --config ${cfgFile} --data-dir ${homeDir}/.local/share/tinted-theming/tinty "$@"
+          XDG_CONFIG_HOME=${homeDir}/.config ${lib.getExe cfg.package} --config ${cfgFile} --data-dir ${homeDir}/.local/share/tinted-theming/tinty "$@"
         '')
       ];
     };
