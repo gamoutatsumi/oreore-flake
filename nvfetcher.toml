@@ -1,7 +1,3 @@
-[tinty]
-src.github = "tinted-theming/tinty"
-fetch.github = "tinted-theming/tinty"
-
 [mcp-hub]
 src.github = "ravitemer/mcp-hub"
 fetch.github = "ravitemer/mcp-hub"

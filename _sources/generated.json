@@ -19,26 +19,5 @@
             "type": "github"
         },
         "version": "v1.7.3"
-    },
-    "tinty": {
-        "cargoLocks": null,
-        "date": null,
-        "extract": null,
-        "name": "tinty",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "deepClone": false,
-            "fetchSubmodules": false,
-            "leaveDotGit": false,
-            "name": null,
-            "owner": "tinted-theming",
-            "repo": "tinty",
-            "rev": "v0.26.1",
-            "sha256": "sha256-+HTdmAKsm9YXyLktAfjPenbRi1RrrCusc6+ZarCI7Ac=",
-            "sparseCheckout": [],
-            "type": "github"
-        },
-        "version": "v0.26.1"
     }
 }

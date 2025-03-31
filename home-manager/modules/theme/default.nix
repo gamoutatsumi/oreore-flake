@@ -1,5 +1,4 @@
 {
-  localFlake,
   importApply,
   tintySchemes,
 }:
@@ -7,6 +6,6 @@
 {
   imports = [
     ./wallpaper.nix
-    (importApply ./tinty.nix { inherit localFlake tintySchemes; })
+    (importApply ./tinty.nix { inherit tintySchemes; })
   ];
 }

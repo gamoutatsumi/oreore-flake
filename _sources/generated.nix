@@ -12,15 +12,4 @@
       sha256 = "sha256-IjLCPP4vNjdO1I9vNrovIhd86KGoHEp8h99V5jRtKLg=";
     };
   };
-  tinty = {
-    pname = "tinty";
-    version = "v0.26.1";
-    src = fetchFromGitHub {
-      owner = "tinted-theming";
-      repo = "tinty";
-      rev = "v0.26.1";
-      fetchSubmodules = false;
-      sha256 = "sha256-+HTdmAKsm9YXyLktAfjPenbRi1RrrCusc6+ZarCI7Ac=";
-    };
-  };
 }

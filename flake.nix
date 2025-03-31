@@ -117,7 +117,6 @@
         flake = {
           homeManagerModules = {
             theme = importApply ./home-manager/modules/theme {
-              localFlake = self;
               tintySchemes = tinty-schemes;
               inherit importApply;
             };

@@ -1,4 +1,4 @@
-{ localFlake, tintySchemes }:
+{ tintySchemes }:
 {
   config,
   lib,
@@ -6,8 +6,6 @@
   ...
 }:
 let
-  inherit (pkgs.stdenv.hostPlatform) system;
-  selfPkgs' = localFlake.packages."${system}";
   cfg = config.theme.tinty;
   settingsFormat = pkgs.formats.toml { };
   genCfgFile = settings: settingsFormat.generate "config.toml" (settings // cfg.settings);
@@ -97,7 +95,7 @@ let
         inherit (settingsFormat) type;
         default = { };
       };
-      package = lib.mkPackageOption selfPkgs' "tinty" { };
+      package = lib.mkPackageOption pkgs "tinty" { };
       shell = lib.mkOption {
         type = lib.types.enum [
           "bash"
