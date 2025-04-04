@@ -3,13 +3,13 @@
 {
   mcp-hub = {
     pname = "mcp-hub";
-    version = "v1.7.3";
+    version = "v1.8.1";
     src = fetchFromGitHub {
       owner = "ravitemer";
       repo = "mcp-hub";
-      rev = "v1.7.3";
+      rev = "v1.8.1";
       fetchSubmodules = false;
-      sha256 = "sha256-IjLCPP4vNjdO1I9vNrovIhd86KGoHEp8h99V5jRtKLg=";
+      sha256 = "sha256-urFu1xoxeDVCBtYhrQrijL5uuke5XxkaM2CF5IO9kHo=";
     };
   };
 }
