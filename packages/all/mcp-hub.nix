@@ -8,7 +8,7 @@
 }:
 pkgs.buildNpmPackage {
   inherit (sources.mcp-hub) version pname src;
-  npmDepsHash = "sha256-A4d9l8YpRaJdNfa934IEG0a2SLRmwW+CfTWgoXx3vwA=";
+  npmDepsHash = "sha256-viBafGv3nLpF1O9rBmboGzn/NyYqNVvmWIVMZAM1pAA=";
   meta = {
     license = lib.licenses.mit;
     inherit (pkgs.nodejs.meta) platforms;
