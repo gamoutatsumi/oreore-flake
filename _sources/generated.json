@@ -13,11 +13,11 @@
             "name": null,
             "owner": "ravitemer",
             "repo": "mcp-hub",
-            "rev": "v2.0.1",
-            "sha256": "sha256-6wVTdfqspZXWvj4Q0631Xhhm/SOFItiplCEWsvSzXoE=",
+            "rev": "v2.1.0",
+            "sha256": "sha256-Pyf9pIrtPKPPqQFTi4t49xYEojWS9RO068CNypx8d3k=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "v2.0.1"
+        "version": "v2.1.0"
     }
 }
