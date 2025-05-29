@@ -20,10 +20,10 @@
       };
     };
     nixpkgs = {
-      url = "github:NixOS/nixpkgs?shallow=1&ref=nixos-unstable";
+      url = "https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz";
     };
     nixpkgs-stable = {
-      url = "github:NixOS/nixpkgs?shallow=1&ref=release-24.11";
+      url = "https://nixos.org/channels/nixos-25.05/nixexprs.tar.xz";
     };
     pre-commit-hooks = {
       url = "github:cachix/git-hooks.nix";
