@@ -53,14 +53,5 @@ in
       xsession = lib.mkIf config.xsession.enable {
         initExtra = initScript;
       };
-      services = {
-        autorandr = lib.mkIf config.services.autorandr.enable {
-          hooks = {
-            postswitch = {
-              feh = initScript;
-            };
-          };
-        };
-      };
     };
 }
