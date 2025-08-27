@@ -50,8 +50,25 @@ in
         '';
     in
     lib.mkIf (cfg.file != null) {
-      xsession = lib.mkIf config.xsession.enable {
-        initExtra = initScript;
+      systemd = {
+        user = {
+          services = {
+            feh = {
+              Install = {
+                WantedBy = [ "graphical-session.target" ];
+              };
+              Unit = {
+                Description = "Setting Wallpaper";
+                After = [ "basic.target" ];
+                PartOf = [ "graphical-session.target" ];
+              };
+              Service = {
+                Type = "oneshot";
+                ExecStart = initScript;
+              };
+            };
+          };
+        };
       };
     };
 }
