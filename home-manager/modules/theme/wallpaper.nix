@@ -36,9 +36,9 @@ in
       };
     };
   };
-  config = lib.mkIf (cfg.file != null) {
-    xsession = lib.mkIf config.xsession.enable {
-      initExtra =
+  config =
+    let
+      initScript =
         let
           flags = lib.concatStringsSep " " [
             "--bg-${cfg.xdg.display}"
@@ -48,6 +48,19 @@ in
         ''
           ${lib.getExe pkgs.feh} ${flags} ${cfg.file} &
         '';
+    in
+    lib.mkIf (cfg.file != null) {
+      xsession = lib.mkIf config.xsession.enable {
+        initExtra = initScript;
+      };
+      services = {
+        autorandr = lib.mkIf config.services.autorandr.enable {
+          hooks = {
+            postswitch = {
+              feh = initScript;
+            };
+          };
+        };
+      };
     };
-  };
 }
